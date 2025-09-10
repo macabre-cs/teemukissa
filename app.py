@@ -96,7 +96,15 @@ def remove_message(message_id):
 def search():
     query = request.args.get("query")
     results = forum.search(query) if query else []
-    return render_template("index.html", query=query, results=results)
+    return render_template("search.html", query=query, results=results)
+
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    messages = users.get_messages(user_id)
+    return render_template("user.html", user=user, messages=messages)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
