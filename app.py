@@ -91,6 +91,12 @@ def remove_message(message_id):
         if "continue" in request.form:
             forum.remove_message(message["id"])
         return redirect("/thread/" + str(message["thread_id"]))
+    
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    results = forum.search(query) if query else []
+    return render_template("index.html", query=query, results=results)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
