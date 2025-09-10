@@ -14,6 +14,8 @@ def index():
 @app.route("/thread/<int:thread_id>")
 def show_thread(thread_id):
     thread = forum.get_thread(thread_id)
+    if not thread:
+        abort(404)
     messages = forum.get_messages(thread_id)
     return render_template("thread.html", thread=thread, messages=messages)
 
@@ -32,12 +34,18 @@ def new_message():
     user_id = session["user_id"]
     thread_id = request.form["thread_id"]
 
-    forum.add_message(content, user_id, thread_id)
+    try:
+        forum.add_message(content, user_id, thread_id)
+    except sqlite3.IntegrityError:
+        abort(403)
+
     return redirect("/thread/" + str(thread_id))
 
 @app.route("/edit/<int:message_id>", methods=["GET", "POST"])
 def edit_message(message_id):
     message = forum.get_message(message_id)
+    if not message:
+        abort(404)
     if message["user_id"] != session["user_id"]:
         abort(403)
 
@@ -52,6 +60,8 @@ def edit_message(message_id):
 @app.route("/remove/<int:message_id>", methods=["GET", "POST"])
 def remove_message(message_id):
     message = forum.get_message(message_id)
+    if not message:
+        abort(404)
     if message["user_id"] != session["user_id"]:
         abort(403)
 
