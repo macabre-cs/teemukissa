@@ -27,9 +27,11 @@ def show_thread(thread_id):
 def new_thread():
     require_login()
 
+    user_id = session["user_id"]
     title = request.form["title"]
     content = request.form["content"]
-    user_id = session["user_id"]
+    if not title or len(title) > 100 or not content or len(content) > 5000:
+        abort(403)
 
     thread_id = forum.add_thread(title, content, user_id)
     return redirect("/thread/" + str(thread_id))
@@ -38,9 +40,12 @@ def new_thread():
 def new_message():
     require_login()
 
-    content = request.form["content"]
     user_id = session["user_id"]
+    content = request.form["content"]
     thread_id = request.form["thread_id"]
+
+    if not content or len(content) > 5000:
+        abort(403)
 
     try:
         forum.add_message(content, user_id, thread_id)
@@ -64,6 +69,8 @@ def edit_message(message_id):
 
     if request.method == "POST":
         content = request.form["content"]
+        if not content or len(content) > 5000:
+            abort(403)
         forum.update_message(message["id"], content)
         return redirect("/thread/" + str(message["thread_id"]))
 
@@ -95,8 +102,15 @@ def register():
         password1 = request.form["password1"]
         password2 = request.form["password2"]
 
+        if not username or len(username) > 30:
+            abort(403)
+        if not password1 or len(password1) > 30:
+            abort(403)
+        if not password2 or len(password2) > 30:
+            abort(403)
+
         if password1 != password2:
-            return "VIRHE: salasanat eivät ole samat"
+            return "VIRHE: turvakisut eivät ole samat"
 
         try:
             users.create_user(username, password1)
@@ -118,7 +132,7 @@ def login():
             session["user_id"] = user_id
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            return "VIRHE: väärä tunnus tai turvakisu"
 
 @app.route("/logout")
 def logout():
