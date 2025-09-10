@@ -6,6 +6,10 @@ import config, forum, users
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def require_login():
+    if "user_id" not in session:
+        abort(403)
+
 @app.route("/")
 def index():
     threads = forum.get_threads()
@@ -21,6 +25,8 @@ def show_thread(thread_id):
 
 @app.route("/new_thread", methods=["POST"])
 def new_thread():
+    require_login()
+
     title = request.form["title"]
     content = request.form["content"]
     user_id = session["user_id"]
@@ -30,6 +36,8 @@ def new_thread():
 
 @app.route("/new_message", methods=["POST"])
 def new_message():
+    require_login()
+
     content = request.form["content"]
     user_id = session["user_id"]
     thread_id = request.form["thread_id"]
@@ -43,6 +51,8 @@ def new_message():
 
 @app.route("/edit/<int:message_id>", methods=["GET", "POST"])
 def edit_message(message_id):
+    require_login()
+
     message = forum.get_message(message_id)
     if not message:
         abort(404)
@@ -59,6 +69,8 @@ def edit_message(message_id):
 
 @app.route("/remove/<int:message_id>", methods=["GET", "POST"])
 def remove_message(message_id):
+    require_login()
+
     message = forum.get_message(message_id)
     if not message:
         abort(404)
