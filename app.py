@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, abort
 import config, forum, users
 
 app = Flask(__name__)
@@ -38,6 +38,8 @@ def new_message():
 @app.route("/edit/<int:message_id>", methods=["GET", "POST"])
 def edit_message(message_id):
     message = forum.get_message(message_id)
+    if message["user_id"] != session["user_id"]:
+        abort(403)
 
     if request.method == "GET":
         return render_template("edit.html", message=message)
@@ -50,6 +52,8 @@ def edit_message(message_id):
 @app.route("/remove/<int:message_id>", methods=["GET", "POST"])
 def remove_message(message_id):
     message = forum.get_message(message_id)
+    if message["user_id"] != session["user_id"]:
+        abort(403)
 
     if request.method == "GET":
         return render_template("remove.html", message=message)
