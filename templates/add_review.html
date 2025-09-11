@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lisää arvostelu</title>
+  </head>
+  <body>
+    <h1>Lisää arvostelu</h1>
+
+    <form action="{{ url_for('add_review') }}" method="POST">
+      <h2>Valitse teelaatu</h2>
+      <div>
+        {% for variety in varieties %}
+        <label>
+          <input type="radio" name="variety" value="{{ variety[0] }}" required />
+          {{ variety[0].capitalize() }} </label
+        ><br />
+        {% endfor %}
+      </div>
+
+      <h2>Arvostelusi</h2>
+      <textarea name="content" rows="4" cols="50" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea
+      ><br />
+
+      <input type="submit" value="Lähetä :3" />
+    </form>
+
+    <a href="/teatimes">Takaisin valikkoon!</a>
+  </body>
+</html>

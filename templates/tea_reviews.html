@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ tea_variety.capitalize() }} arvostelut</title>
+  </head>
+
+  <body>
+    <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
+    <div id="reviews">
+      {% if reviews %}
+      <ul>
+        {% for review in reviews %}
+        <li>
+          <strong>{{ review.username }}:</strong> {{ review.content }}
+          <em>({{ review.sent_at }})</em>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>Ei vielä arvosteluita tälle teelle!</p>
+      {% endif %}
+    </div>
+
+    <h2>Lisää arvostelu teelle :3</h2>
+    <form action="{{ url_for('add_review') }}" method="POST">
+      <div>
+        <label><input type="radio" name="variety" value="vihermau" required /> Vihermau</label><br />
+        <label><input type="radio" name="variety" value="mustitee" /> Mustitee</label><br />
+        <label><input type="radio" name="variety" value="valkotassu" /> Valkotassu</label><br />
+        <label><input type="radio" name="variety" value="maulong" /> Maulong</label><br />
+        <label><input type="radio" name="variety" value="miutcha" /> Miutcha</label><br />
+        <label><input type="radio" name="variety" value="rooimisu" /> Rooimisu</label><br />
+        <label><input type="radio" name="variety" value="yrttikatti" /> Yrttikatti</label><br />
+        <label><input type="radio" name="variety" value="purrrer" /> Purrr'er</label><br />
+        <label><input type="radio" name="variety" value="calico" /> Calico</label><br />
+      </div>
+      <textarea name="content" rows="4" cols="50" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea
+      ><br />
+      <input type="submit" value="Lähetä :3" />
+    </form>
+
+    <a href="/teatimes">Takaisin valikkoon!</a>
+  </body>
+</html>

@@ -43,3 +43,8 @@ def get_image(user_id):
     sql = "SELECT image FROM users WHERE id = ?"
     result = db.query(sql, [user_id])
     return result[0][0] if result else None
+
+def user_exists(user_id):
+    sql = "SELECT COUNT(*) FROM users WHERE id = ?"
+    count = db.query(sql, [user_id])[0][0]
+    return count > 0

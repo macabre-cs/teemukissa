@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Teehetket</title>
+</head>
+
+<body>
+  <h1>Teehetket</h1>
+
+  <p>
+    <a href="/search">Haku</a> |
+    <a href="/register">Luo tunnus</a> |
+    {% if session.user_id %}
+    <a href="/logout">Kirjaudu ulos</a> |
+    {% else %}
+    <a href="/login">Kirjaudu sisään</a> |
+    {% endif %}
+    <a href="/">Etusivulle</a>
+  </p>
+
+  {% if session.user_id %}
+  <hr />
+  <p>
+    <a href="/add_review">Lisää teehetki</a>
+  </p>
+  <hr />
+  {% endif %}
+
+  <div class="button-container">
+    {% for variety in varieties %}
+        <a href="/tea/{{ variety.name }}" class="tea-button">{{ variety.name.capitalize() }}</a>
+        {% if not loop.last %} | {% endif %}
+    {% endfor %}
+  </div>
+
+  <hr />
+</body>
+
+</html>

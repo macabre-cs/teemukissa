@@ -1,10 +1,13 @@
 import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, make_response
-import config, forum, users
+import config, forum, users, tea
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+with app.app_context():
+    tea.populate_tea_varieties()
 
 def require_login():
     if "user_id" not in session:
@@ -14,6 +17,45 @@ def require_login():
 def index():
     threads = forum.get_threads()
     return render_template("index.html", threads=threads)
+
+@app.route("/teatimes")
+def show_teatimes():
+    varieties = tea.get_tea_varieties()
+    return render_template("teatimes.html", varieties=varieties)
+
+@app.route("/tea/<tea_variety>")
+def tea_reviews(tea_variety):
+    reviews = tea.get_reviews(tea_variety)
+    return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety)
+
+@app.route("/add_review", methods=["GET", "POST"])
+def add_review():
+    if request.method == "GET":
+        varieties = tea.get_tea_varieties()  # Get the tea varieties from the database
+        return render_template("add_review.html", varieties=varieties)
+    
+    if request.method == "POST":
+        require_login()
+        
+        user_id = session["user_id"]
+        content = request.form["content"]
+        variety = request.form["variety"]
+
+        if not tea.variety_exists(variety):
+            abort(403)
+
+        if not users.user_exists(user_id):
+            abort(403)
+
+        if not content or len(content) > 5000:
+            abort(403)
+
+        try:
+            tea.add_review(variety, content, user_id)
+        except sqlite3.IntegrityError as e:
+            abort(403)
+
+        return redirect(f"/tea/{variety}")
 
 @app.route("/thread/<int:thread_id>")
 def show_thread(thread_id):

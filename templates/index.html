@@ -2,11 +2,11 @@
 <html>
 
 <head>
-  <title>Teemukissakeskustelu</title>
+  <title>Teemukissa</title>
 </head>
 
 <body>
-  <h1>Teemukissakeskustelu</h1>
+  <h1>Teemukissa</h1>
 
   <p>
     <a href="/search">Haku</a> |
@@ -19,30 +19,13 @@
   </p>
 
   <hr />
-  {% for thread in threads %}
   <p>
-    <a href="/thread/{{ thread.id }}">{{ thread.title }}</a>
+    <a href="/teatimes">Teehetket</a>
     <br />
-    {{ thread.total }} viestiä, uusin {{ thread.last }}
+    <hr />
+    <a href="/add_review">Lisää teehetki</a>
   </p>
   <hr />
-  {% endfor %}
-
-  {% if session.user_id %}
-  <h2>Uusi ketju</h2>
-
-  <form action="/new_thread" method="post">
-    <p>
-      Otsikko:<br />
-      <input type="text" name="title" maxlength="100" required />
-    </p>
-    <p>
-      Viesti:<br />
-      <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
-    </p>
-    <input type="submit" value="Lähetä" />
-  </form>
-  {% endif %}
 </body>
 
 </html>
