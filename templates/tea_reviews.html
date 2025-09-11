@@ -2,17 +2,49 @@
 <html>
   <head>
     <title>{{ tea_variety.capitalize() }} arvostelut</title>
+    <style>
+      body {
+        margin: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+      }
+      h1 {
+        color: #333;
+      }
+      .review {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 10px;
+        background-color: #fff;
+      }
+      .review strong {
+        color: #555;
+      }
+      .review em {
+        color: #888;
+        font-size: 0.9em;
+      }
+      .actions {
+        margin-top: 10px;
+      }
+    </style>
   </head>
-
   <body>
     <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
     <div id="reviews">
       {% if reviews %}
       <ul>
         {% for review in reviews %}
-        <li>
+        <li class="review">
           <strong>{{ review.username }}:</strong> {{ review.content }}
           <em>({{ review.sent_at }})</em>
+          <div class="actions">
+            {% if review.user_id == session['user_id'] %}
+            <a href="/edit/{{ review.id }}">Muokkaa</a> |
+            <a href="/remove/{{ review.id }}">Poista</a>
+            {% endif %}
+          </div>
         </li>
         {% endfor %}
       </ul>

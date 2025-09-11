@@ -2,19 +2,17 @@
 <html>
 
 <head>
-  <title>Viestin poisto</title>
+    <title>Poista arvostelu</title>
 </head>
-
 <body>
-  <h1>Viestin poisto</h1>
+    <h1>Poista arvostelu</h1>
 
-  <form action="/remove/{{ message.id }}" method="post">
-    <p>
-      Haluatko varmasti poistaa viestin?
-    </p>
-    <input type="submit" name="continue" value="Jatka" />
-    <input type="submit" name="cancel" value="Peruuta" />
-  </form>
+    <form action="/remove/{{ review.id }}" method="post">
+        <p>
+            Haluatko varmasti poistaa arvostelun?
+        </p>
+        <input type="submit" name="continue" value="Jatka" />
+        <input type="submit" name="cancel" value="Peruuta" />
+    </form>
 </body>
-
 </html>

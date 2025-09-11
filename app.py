@@ -96,43 +96,45 @@ def new_message():
 
     return redirect("/thread/" + str(thread_id))
 
-@app.route("/edit/<int:message_id>", methods=["GET", "POST"])
-def edit_message(message_id):
+@app.route("/edit/<int:review_id>", methods=["GET", "POST"])
+def edit_review(review_id):
     require_login()
 
-    message = forum.get_message(message_id)
-    if not message:
+    review = tea.get_review(review_id)
+    if not review:
         abort(404)
-    if message["user_id"] != session["user_id"]:
+    
+    if review["user_id"] != session["user_id"]:
         abort(403)
 
     if request.method == "GET":
-        return render_template("edit.html", message=message)
+        return render_template("edit.html", review=review)
 
     if request.method == "POST":
         content = request.form["content"]
         if not content or len(content) > 5000:
             abort(403)
-        forum.update_message(message["id"], content)
-        return redirect("/thread/" + str(message["thread_id"]))
 
-@app.route("/remove/<int:message_id>", methods=["GET", "POST"])
-def remove_message(message_id):
+        tea.update_review(review_id, content)
+        return redirect(f"/tea/{review['variety']}")
+
+@app.route("/remove/<int:review_id>", methods=["GET", "POST"])
+def remove_review(review_id):
     require_login()
 
-    message = forum.get_message(message_id)
-    if not message:
+    review = tea.get_review(review_id)
+    if not review:
         abort(404)
-    if message["user_id"] != session["user_id"]:
+
+    if review["user_id"] != session["user_id"]:
         abort(403)
 
     if request.method == "GET":
-        return render_template("remove.html", message=message)
+        return render_template("remove.html", review=review)
 
     if request.method == "POST":
-        if "continue" in request.form:
-            forum.remove_message(message["id"])
-        return redirect("/thread/" + str(message["thread_id"]))
+        tea.delete_review(review_id)
+        return redirect(f"/tea/{review['variety']}")
     
 @app.route("/search")
 def search():
