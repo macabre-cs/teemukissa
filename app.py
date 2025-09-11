@@ -137,7 +137,7 @@ def remove_message(message_id):
 @app.route("/search")
 def search():
     query = request.args.get("query")
-    results = forum.search(query) if query else []
+    results = tea.search_reviews(query) if query else []
     return render_template("search.html", query=query, results=results)
 
 @app.route("/user/<int:user_id>")
