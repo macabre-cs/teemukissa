@@ -115,8 +115,11 @@ def show_user(user_id):
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    success_message = None
+    show_form = True
+
     if request.method == "GET":
-        return render_template("register.html")
+        return render_template("register.html", success_message=success_message, show_form=show_form)
 
     if request.method == "POST":
         username = request.form["username"]
@@ -135,9 +138,12 @@ def register():
 
         try:
             users.create_user(username, password1)
-            return "Tunnus luotu"
+            success_message = "Tunnus luotu onnistuneesti!"
+            show_form = False
         except sqlite3.IntegrityError:
             return "VIRHE: tunnus on jo varattu"
+
+        return render_template("register.html", success_message=success_message, show_form=show_form)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

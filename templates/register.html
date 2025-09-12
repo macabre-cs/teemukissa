@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Luo tunnus :3</title>
+  </head>
+  <body>
+    <h1>Luo tunnus</h1>
 
-<head>
-  <title>Luo tunnus :3</title>
-</head>
+    {% if success_message %}
+    <p>{{ success_message }}</p>
+    {% endif %} {% if show_form %}
+    <form action="/register" method="post">
+      <p>
+        Tunnus: <br />
+        <input type="text" name="username" maxlength="30" required />
+      </p>
+      <p>
+        Turvakisu: <br />
+        <input type="password" name="password1" maxlength="30" required />
+      </p>
+      <p>
+        Turvakisu uudestaan: <br />
+        <input type="password" name="password2" maxlength="30" required />
+      </p>
+      <input type="submit" value="Luo tunnus" />
+    </form>
+    {% endif %}
 
-<body>
-  <h1>Luo tunnus</h1>
-
-  <form action="/register" method="post">
+    <hr />
     <p>
-      Tunnus: <br />
-      <input type="text" name="username" maxlength="30" required />
+      <a href="/">Etusivulle :3</a>
     </p>
-    <p>
-      Turvakisu: <br />
-      <input type="password" name="password1" maxlength="30" required />
-    </p>
-    <p>
-      Turvakisu uudestaan: <br />
-      <input type="password" name="password2" maxlength="30" required />
-    </p>
-    <input type="submit" value="Luo tunnus" />
-  </form>
-
-  <hr />
-  <p>
-    <a href="/">Etusivulle :3</a>
-  </p>
-</body>
-
+  </body>
 </html>
