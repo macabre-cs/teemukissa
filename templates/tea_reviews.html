@@ -37,7 +37,8 @@
       <ul>
         {% for review in reviews %}
         <li class="review">
-          <strong>{{ review.username }}:</strong> {{ review.content }}
+          <strong> <a href="/user/{{ review.user_id }}">{{ review.username }}</a>: </strong>
+          {{ review.content }}
           <em>({{ review.sent_at }})</em>
           <div class="actions">
             {% if review.user_id == session['user_id'] %}

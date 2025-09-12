@@ -36,7 +36,7 @@
       <li>
         <strong>{{ result.variety.capitalize() }}:</strong> {{ result.content }}
         <br />
-        <em>{{ result.username }} ({{ result.sent_at }})</em>
+        <em> <a href="/user/{{ result.user_id }}">{{ result.username }}</a> ({{ result.sent_at }}) </em>
       </li>
       {% endfor %}
     </ul>

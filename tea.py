@@ -38,7 +38,7 @@ def delete_review(review_id):
     db.execute(sql, [review_id])
 
 def search_reviews(query):
-    sql = """SELECT r.content, r.sent_at, r.variety, u.username 
+    sql = """SELECT r.content, r.sent_at, r.variety, u.username, u.id AS user_id 
              FROM reviews r 
              JOIN users u ON r.user_id = u.id 
              WHERE r.content LIKE ?"""
