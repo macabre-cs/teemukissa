@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, make_response
-import config, forum, users, tea
+import config, users, tea
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -15,8 +15,7 @@ def require_login():
 
 @app.route("/")
 def index():
-    threads = forum.get_threads()
-    return render_template("index.html", threads=threads)
+    return render_template("index.html")
 
 @app.route("/teatimes")
 def show_teatimes():
@@ -31,7 +30,7 @@ def tea_reviews(tea_variety):
 @app.route("/add_review", methods=["GET", "POST"])
 def add_review():
     if request.method == "GET":
-        varieties = tea.get_tea_varieties()  # Get the tea varieties from the database
+        varieties = tea.get_tea_varieties()
         return render_template("add_review.html", varieties=varieties)
     
     if request.method == "POST":
@@ -52,49 +51,10 @@ def add_review():
 
         try:
             tea.add_review(variety, content, user_id)
-        except sqlite3.IntegrityError as e:
+        except sqlite3.IntegrityError:
             abort(403)
 
         return redirect(f"/tea/{variety}")
-
-@app.route("/thread/<int:thread_id>")
-def show_thread(thread_id):
-    thread = forum.get_thread(thread_id)
-    if not thread:
-        abort(404)
-    messages = forum.get_messages(thread_id)
-    return render_template("thread.html", thread=thread, messages=messages)
-
-@app.route("/new_thread", methods=["POST"])
-def new_thread():
-    require_login()
-
-    user_id = session["user_id"]
-    title = request.form["title"]
-    content = request.form["content"]
-    if not title or len(title) > 100 or not content or len(content) > 5000:
-        abort(403)
-
-    thread_id = forum.add_thread(title, content, user_id)
-    return redirect("/thread/" + str(thread_id))
-
-@app.route("/new_message", methods=["POST"])
-def new_message():
-    require_login()
-
-    user_id = session["user_id"]
-    content = request.form["content"]
-    thread_id = request.form["thread_id"]
-
-    if not content or len(content) > 5000:
-        abort(403)
-
-    try:
-        forum.add_message(content, user_id, thread_id)
-    except sqlite3.IntegrityError:
-        abort(403)
-
-    return redirect("/thread/" + str(thread_id))
 
 @app.route("/edit/<int:review_id>", methods=["GET", "POST"])
 def edit_review(review_id):
