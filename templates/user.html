@@ -1,49 +1,40 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Käyttäjä {{ profile_user.username }}</title>
+  </head>
+  <body>
+    <h1>Käyttäjä {{ profile_user.username }}</h1>
 
-<head>
-  <title>Käyttäjä {{ user.username }}</title>
-</head>
+    {% if profile_user.has_image %}
+    <img src="/image/{{ profile_user.id }}" />
+    {% endif %}
+    {% if profile_user.id == logged_in_user %}
+    <p>
+      <a href="/add_image">Lisää profiilikuva</a>
+    </p>
+    {% endif %}
 
-<body>
-  <h1>Käyttäjä {{ user.username }}</h1>
+    <p>Käyttäjä on lähettänyt {{ reviews | count }} arvostelua</p>
 
-  {% if user.has_image %}
-  <img src="/image/{{ user.id }}">
-  {% endif %}
-
-  {% if user.id == session.user_id %}
-  <p>
-    <a href="/add_image">Lisää profiilikuva</a>
-  </p>
-  {% endif %}
-
-  <p>
-    Käyttäjä on lähettänyt {{ messages | count }} viestiä
-  </p>
-
-  {% if messages %}
-  <p>
-    Ensimmäinen viesti lähetetty {{ messages[-1].sent_at }}
-  </p>
-  <p>
-    Viimeisin viesti lähetetty {{ messages[0].sent_at }}
-  </p>
-  {% endif %}
-
-  <h2>Viestit</h2>
-
-  <ul>
-  {% for message in messages %}
-    <li>
-      <a href="/thread/{{ message.thread_id }}#{{ message.id }}">
-        {{ message.thread_title }}
-      </a>
-      <br />
-      ({{ message.sent_at }})
-    </li>  
-  {% endfor %}
-  </ul>
-</body>
-
+    {% if reviews %}
+    <h2>Arvostelut</h2>
+    <ul>
+      {% for review in reviews %}
+      <li>
+        <strong>{{ review.variety_name }}:</strong> {{ review.content }}
+        <em>({{ review.sent_at }})</em>
+        <div class="actions">
+          {% if profile_user.id == logged_in_user %}
+          <a href="/edit/{{ review.id }}">Muokkaa</a> |
+          <a href="/remove/{{ review.id }}">Poista</a>
+          {% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Käyttäjä ei ole kirjoittanut vielä arvosteluita!</p>
+    {% endif %}
+  </body>
 </html>

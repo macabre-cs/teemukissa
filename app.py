@@ -133,7 +133,8 @@ def remove_review(review_id):
         return render_template("remove.html", review=review)
 
     if request.method == "POST":
-        tea.delete_review(review_id)
+        if "continue" in request.form:
+            tea.delete_review(review_id)
         return redirect(f"/tea/{review['variety']}")
     
 @app.route("/search")
@@ -144,11 +145,13 @@ def search():
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
-    user = users.get_user(user_id)
-    if not user:
+    profile_user = users.get_user(user_id)
+    if not profile_user:
         abort(404)
-    messages = users.get_messages(user_id)
-    return render_template("user.html", user=user, messages=messages)
+    
+    reviews = users.get_reviews(user_id)
+    logged_in_user = session["user_id"]
+    return render_template("user.html", profile_user=profile_user, reviews=reviews, logged_in_user=logged_in_user)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
