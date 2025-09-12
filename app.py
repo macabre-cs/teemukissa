@@ -140,6 +140,10 @@ def register():
             users.create_user(username, password1)
             success_message = "Tunnus luotu onnistuneesti!"
             show_form = False
+            
+            user_id = users.check_login(username, password1)
+            session["user_id"] = user_id
+            
         except sqlite3.IntegrityError:
             return "VIRHE: tunnus on jo varattu"
 
