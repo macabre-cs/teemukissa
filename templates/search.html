@@ -5,7 +5,9 @@
     <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
-    <h1>Haku</h1>
+    <div class="header">
+      <h1>Haku</h1>
+    </div>
     {% if session.user_id %}
     <h3>Mitäs etsit {{ session['username'] }}?</h3>
     {% endif %}

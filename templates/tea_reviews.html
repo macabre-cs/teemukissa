@@ -5,7 +5,9 @@
     <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
-    <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
+    <div class="header">
+      <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
+    </div>
     <div class="reviews">
       {% if reviews %}
         {% for review in reviews %}

@@ -2,10 +2,12 @@
 <html>
   <head>
     <title>Lisää arvostelu</title>
-    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/main.css" />
   </head>
   <body>
-    <h1>Lisää arvostelu</h1>
+    <div class="header">
+      <h1>Lisää arvostelu</h1>
+    </div>
     {% if session.user_id %}
     <h3>Tee vaan maistuu. Eikö niin {{ session['username'] }}?</h3>
     {% endif %}
