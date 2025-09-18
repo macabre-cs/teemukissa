@@ -8,12 +8,15 @@
 <body>
   <h1>Teemukissa</h1>
 
+  {% if session.user_id %}
+  <h3>Ihana nähdä {{ session['username'] }} :3</h3>
+  {% endif %}
   <p>
-    <a href="/register">Luo tunnus</a> |
     {% if session.user_id %}
-    <a href="/logout">Kirjaudu ulos</a>
+      <a href="/logout">Kirjaudu ulos</a>
     {% else %}
-    <a href="/login">Kirjaudu sisään</a>
+      <a href="/login">Kirjaudu sisään</a> |
+      <a href="/register">Luo tunnus</a>
     {% endif %}
   </p>
 

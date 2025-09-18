@@ -5,6 +5,9 @@
   </head>
   <body>
     <h1>Lisää arvostelu</h1>
+    {% if session.user_id %}
+    <h3>Tee vaan maistuu. Eikö niin {{ session['username'] }}?</h3>
+    {% endif %}
 
     <form action="{{ url_for('add_review') }}" method="POST">
       <h2>Valitse teelaatu</h2>

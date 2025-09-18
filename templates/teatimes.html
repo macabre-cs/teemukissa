@@ -7,6 +7,9 @@
 
 <body>
   <h1>Teehetket</h1>
+  {% if session.user_id %}
+  <h3>Mikäs mauuustuisi {{ session['username'] }}?</h3>
+  {% endif %}
 
   <p>
     <a href="/search">Haku</a> |

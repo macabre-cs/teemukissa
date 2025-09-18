@@ -161,6 +161,7 @@ def login():
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
+            session["username"] = username
             return redirect("/")
         else:
             return "VIRHE: väärä tunnus tai turvakisu"

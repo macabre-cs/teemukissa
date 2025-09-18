@@ -5,8 +5,10 @@
   </head>
   <body>
     <h1>Haku</h1>
+    {% if session.user_id %}
+    <h3>Mitäs etsit {{ session['username'] }}?</h3>
+    {% endif %}
     <p>
-      <a href="/register">Luo tunnus</a> |
       {% if session.user_id %}
       <a href="/logout">Kirjaudu ulos</a> |
       {% else %}
