@@ -60,6 +60,25 @@ Tietokannat ja web-ohjelmointi harjoitustyö
   )  |  \  `.___________|/
   `--'   `--'
 ```
+## Sovelluksen asennus ₍^. .^₎⟆
+Asenna `flask`-kirjasto:
+
+```
+$ pip install flask
+```
+
+Luo tietokannan taulut:
+
+```
+$ sqlite3 database.db < schema.sql
+```
+
+Käynnistä sovellus:
+
+```
+$ flask run
+```
+
 ## Kokoelma söpöjä ASCII-kissoja ≽^-⩊-^≼
 ```
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⡟⠀⠀⠀⠀⠀⠀⠀
