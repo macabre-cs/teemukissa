@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: auto;
+    max-width: 50em;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+.header {
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.nav {
+    margin: 10px 0;
+}
+
+.buttons {
+    text-align: center;
+    margin: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #fff;
+}
+
+.reviews {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+}
+
+.review {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px;
+    background-color: #fff;
+}
+
+.reviews strong {
+    color: #555;
+}
+
+.reviews em {
+    color: #888;
+    font-size: 0.9em;
+}
+
+.actions {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

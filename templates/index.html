@@ -3,35 +3,36 @@
 
 <head>
   <title>Teemukissa</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  <h1>Teemukissa</h1>
+  <div class="header">
+    <h1>Teemukissa</h1>
+  </div>
 
   {% if session.user_id %}
   <h3>Ihana nähdä {{ session['username'] }} :3</h3>
   {% endif %}
   <p>
+    <div class="nav">
     {% if session.user_id %}
       <a href="/logout">Kirjaudu ulos</a>
     {% else %}
       <a href="/login">Kirjaudu sisään</a> |
       <a href="/register">Luo tunnus</a>
     {% endif %}
+    </div>
   </p>
 
   <hr />
   <p>
-    <a href="/teatimes">Teehetket</a>
-    <br />
-    <hr />
-    <a href="/add_review">Lisää teehetki</a>
-    <br />
-    <hr />
+    <div class="buttons">
+    <a href="/teatimes">Teehetket</a> |
+    <a href="/add_review">Lisää teehetki</a> |
     <a href="/search">Hae teehetkiä</a>
-    <br />
+    </div>
   </p>
-  <hr />
 </body>
 
 </html>

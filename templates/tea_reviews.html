@@ -2,41 +2,14 @@
 <html>
   <head>
     <title>{{ tea_variety.capitalize() }} arvostelut</title>
-    <style>
-      body {
-        margin: 20px;
-        padding: 20px;
-        background-color: #f9f9f9;
-      }
-      h1 {
-        color: #333;
-      }
-      .review {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 15px;
-        margin-bottom: 10px;
-        background-color: #fff;
-      }
-      .review strong {
-        color: #555;
-      }
-      .review em {
-        color: #888;
-        font-size: 0.9em;
-      }
-      .actions {
-        margin-top: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
     <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
-    <div id="reviews">
+    <div class="reviews">
       {% if reviews %}
-      <ul>
         {% for review in reviews %}
-        <li class="review">
+        <div class="review">
           <strong><a href="/user/{{ review.user_id }}">{{ review.username }}</a>:</strong>
           {{ review.content }}
           <em>({{ review.sent_at }})</em>
@@ -46,9 +19,8 @@
             <a href="/remove/{{ review.id }}">Poista</a>
             {% endif %}
           </div>
-        </li>
+        </div>
         {% endfor %}
-      </ul>
       {% else %}
       <p>Ei vielä arvosteluita tälle teelle!</p>
       {% endif %}
