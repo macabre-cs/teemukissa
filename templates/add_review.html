@@ -10,7 +10,7 @@
     <h3>Tee vaan maistuu. Eikö niin {{ session['username'] }}?</h3>
     {% endif %}
 
-    <form action="{{ url_for('add_review') }}" method="POST">
+    <form action="/add_review" method="POST">
       <h2>Valitse teelaatu</h2>
       <div>
         {% for variety in varieties %}
