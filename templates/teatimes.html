@@ -17,12 +17,13 @@
   <p>
     <div class="nav">
     <a href="/search">Haku</a> |
+    <a href="/">Etusivulle</a> |
     {% if session.user_id %}
     <a href="/logout">Kirjaudu ulos</a> |
+    <a href="/user/{{ session.user_id }}">Oma profiili</a>
     {% else %}
-    <a href="/login">Kirjaudu sisään</a> |
+    <a href="/login">Kirjaudu sisään</a>
     {% endif %}
-    <a href="/">Etusivulle</a>
     </div>
   </p>
   <hr />
