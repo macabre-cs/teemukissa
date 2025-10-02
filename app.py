@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, abort, make_response
+from flask import redirect, render_template, request, session, abort, make_response, flash
 import config, users, tea
 import markupsafe
 
@@ -141,7 +141,9 @@ def register():
             abort(403)
 
         if password1 != password2:
-            return "VIRHE: turvakisut eivät ole samat"
+            #return "VIRHE: turvakisut eivät ole samat"
+            flash("VIRHE: turvakisut eivät ole samat")
+            return redirect("/register")
 
         try:
             users.create_user(username, password1)
@@ -153,7 +155,9 @@ def register():
             session["username"] = username
             
         except sqlite3.IntegrityError:
-            return "VIRHE: tunnus on jo varattu"
+            flash("VIRHE: tunnus on jo varattu")
+            return redirect("/register")
+            #return "VIRHE: tunnus on jo varattu"
 
         return render_template("register.html", success_message=success_message, show_form=show_form)
 
@@ -172,7 +176,8 @@ def login():
             session["username"] = username
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai turvakisu"
+            flash("VIRHE: väärä tunnus tai turvakisu")
+            return redirect("/login")
         
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
@@ -184,14 +189,17 @@ def add_image():
     if request.method == "POST":
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
-            return "VIRHE: väärä tiedostomuoto"
+            flash("VIRHE: Lähettämäsi tiedosto ei ole jpg-tiedosto")
+            return redirect("/add_image")
 
         image = file.read()
         if len(image) > 100 * 1024:
-            return "VIRHE: liian suuri kuva"
+            flash("VIRHE: Lähettämäsi tiedosto on liian suuri")
+            return redirect("/add_image")
 
         user_id = session["user_id"]
         users.update_image(user_id, image)
+        flash("Kuvan lisääminen onnistui")
         return redirect("/user/" + str(user_id))
     
 @app.route("/image/<int:user_id>")
@@ -206,6 +214,5 @@ def show_image(user_id):
 
 @app.route("/logout")
 def logout():
-    #del session["user_id"]
     session.clear()
     return redirect("/")

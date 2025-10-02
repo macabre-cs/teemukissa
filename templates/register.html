@@ -8,8 +8,14 @@
     <h1>Luo tunnus</h1>
 
     {% if success_message %}
-    <p>{{ success_message }}</p>
+      <p>{{ success_message }}</p>
     {% endif %} {% if show_form %}
+
+    {% for message in get_flashed_messages() %}
+    <p>
+      <b>{{ message }}</b>
+    </p>
+    {% endfor %}
     <form action="/register" method="post">
       <p>
         Tunnus: <br />
