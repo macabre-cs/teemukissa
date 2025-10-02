@@ -16,7 +16,7 @@
           {{ review.content }}
           <em>({{ review.sent_at }})</em>
           <div class="actions">
-            {% if review.user_id == session['user_id'] %}
+            {% if review.user_id == session["user_id"] %}
             <a href="/edit/{{ review.id }}">Muokkaa</a> |
             <a href="/remove/{{ review.id }}">Poista</a>
             {% endif %}

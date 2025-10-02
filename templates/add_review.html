@@ -9,7 +9,7 @@
       <h1>Lisää arvostelu</h1>
     </div>
     {% if session.user_id %}
-    <h3>Tee vaan maistuu. Eikö niin {{ session['username'] }}?</h3>
+    <h3>Tee vaan maistuu. Eikö niin {{ session["username"] }}?</h3>
     {% endif %}
 
     <form action="/add_review" method="POST">

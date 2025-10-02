@@ -76,7 +76,7 @@ def edit_review(review_id):
             abort(403)
 
         tea.update_review(review_id, content)
-        return redirect(f"/tea/{review['variety']}")
+        return redirect(f"/tea/{review["variety"]}")
 
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])
 def remove_review(review_id):
@@ -95,7 +95,7 @@ def remove_review(review_id):
     if request.method == "POST":
         if "continue" in request.form:
             tea.delete_review(review_id)
-        return redirect(f"/tea/{review['variety']}")
+        return redirect(f"/tea/{review["variety"]}")
     
 @app.route("/search")
 def search():
