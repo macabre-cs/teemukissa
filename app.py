@@ -2,6 +2,7 @@ import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, make_response
 import config, users, tea
+import markupsafe
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -12,6 +13,12 @@ with app.app_context():
 def require_login():
     if "user_id" not in session:
         abort(403)
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 @app.route("/")
 def index():

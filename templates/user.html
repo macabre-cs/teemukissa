@@ -23,7 +23,7 @@
     <ul>
       {% for review in reviews %}
       <li>
-        <strong>{{ review.variety_name }}:</strong> {{ review.content }}
+        <strong>{{ review.variety_name }}:</strong> {{ review.content | show_lines }}
         <em>({{ review.sent_at }})</em>
         <div class="actions">
           {% if profile_user.id == logged_in_user %}
