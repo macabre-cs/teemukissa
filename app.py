@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, secrets
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, make_response, flash
 import config, users, tea
@@ -12,6 +12,10 @@ with app.app_context():
 
 def require_login():
     if "user_id" not in session:
+        abort(403)
+
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
 @app.template_filter()
@@ -41,6 +45,7 @@ def add_review():
         return render_template("add_review.html", varieties=varieties)
     
     if request.method == "POST":
+        check_csrf()
         require_login()
         
         user_id = session["user_id"]
@@ -78,6 +83,7 @@ def edit_review(review_id):
         return render_template("edit.html", review=review)
 
     if request.method == "POST":
+        check_csrf()
         content = request.form["content"]
         if not content or len(content) > 5000:
             abort(403)
@@ -100,6 +106,7 @@ def remove_review(review_id):
         return render_template("remove.html", review=review)
 
     if request.method == "POST":
+        check_csrf()
         if "continue" in request.form:
             tea.delete_review(review_id)
         return redirect(f"/tea/{review["variety"]}")
@@ -174,6 +181,7 @@ def login():
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             flash("VIRHE: väärä tunnus tai turvakisu")
@@ -187,6 +195,7 @@ def add_image():
         return render_template("add_image.html")
 
     if request.method == "POST":
+        check_csrf()
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
             flash("VIRHE: Lähettämäsi tiedosto ei ole jpg-tiedosto")
