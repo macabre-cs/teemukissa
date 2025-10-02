@@ -5,20 +5,6 @@ CREATE TABLE users (
     image BLOB
 );
 
-CREATE TABLE threads (
-    id INTEGER PRIMARY KEY,
-    title TEXT,
-    user_id INTEGER REFERENCES users
-);
-
-CREATE TABLE messages (
-    id INTEGER PRIMARY KEY,
-    content TEXT,
-    sent_at TEXT,
-    user_id INTEGER REFERENCES users,
-    thread_id INTEGER REFERENCES threads
-);
-
 CREATE TABLE tea_varieties (
     id INTEGER PRIMARY KEY,
     name TEXT UNIQUE
