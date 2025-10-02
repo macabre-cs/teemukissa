@@ -2,28 +2,44 @@
 <html>
   <head>
     <title>{{ tea_variety.capitalize() }} arvostelut</title>
-    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/main.css" />
   </head>
   <body>
     <div class="header">
       <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
     </div>
     <div class="reviews">
-      {% if reviews %}
-        {% for review in reviews %}
-        <div class="review">
-          <strong><a href="/user/{{ review.user_id }}">{{ review.username }}</a>:</strong>
-          {{ review.content | show_lines }}
-          <em>({{ review.sent_at }})</em>
-          <div class="actions">
-            {% if review.user_id == session["user_id"] %}
-            <a href="/edit/{{ review.id }}">Muokkaa</a> |
-            <a href="/remove/{{ review.id }}">Poista</a>
-            {% endif %}
-          </div>
+      {% if reviews %} {% for review in reviews %}
+      <div class="review">
+        <strong><a href="/user/{{ review.user_id }}">{{ review.username }}</a>:</strong>
+        {{ review.content | show_lines }}
+        <em>({{ review.sent_at }})</em>
+        <div class="actions">
+          {% if review.user_id == session["user_id"] %}
+          <a href="/edit/{{ review.id }}">Muokkaa</a> |
+          <a href="/remove/{{ review.id }}">Poista</a>
+          {% endif %}
         </div>
-        {% endfor %}
-      {% else %}
+        <h3>Komentit:</h3>
+        <ul>
+          {% for comment in comments[review['id']] %}
+          <li>
+            <strong>{{ comment.username }}:</strong> {{ comment.content }}
+            <em>({{ comment.sent_at }})</em>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <h4>Lisää kommentti:</h4>
+        <form action="/add_comment" method="POST">
+          <input type="hidden" name="review_id" value="{{ review['id'] }}" />
+          <textarea name="content" rows="2" cols="50" required placeholder="Kirjoita kommenttisi tähän..."></textarea
+          ><br />
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+          <input type="submit" value="Lisää kommentti" />
+        </form>
+      </div>
+      {% endfor %} {% else %}
       <p>Ei vielä arvosteluita tälle teelle!</p>
       {% endif %}
     </div>

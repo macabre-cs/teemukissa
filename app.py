@@ -36,7 +36,8 @@ def show_teatimes():
 @app.route("/tea/<tea_variety>")
 def tea_reviews(tea_variety):
     reviews = tea.get_reviews(tea_variety)
-    return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety)
+    comments = {review['id']: tea.get_comments(review['id']) for review in reviews}
+    return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety, comments=comments)
 
 @app.route("/add_review", methods=["GET", "POST"])
 def add_review():
@@ -110,6 +111,22 @@ def remove_review(review_id):
         if "continue" in request.form:
             tea.delete_review(review_id)
         return redirect(f"/tea/{review["variety"]}")
+    
+@app.route("/add_comment", methods=["POST"])
+def add_comment():
+    check_csrf()
+    require_login()
+
+    review_id = request.form["review_id"]
+    content = request.form["content"]
+    user_id = session["user_id"]
+
+    if not content or len(content) > 5000:
+        abort(403)
+
+    tea.add_comment(review_id, user_id, content)
+    review = tea.get_review(review_id)
+    return redirect(f"/tea/{review['variety']}")
     
 @app.route("/search")
 def search():

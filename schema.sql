@@ -17,3 +17,11 @@ CREATE TABLE reviews (
     sent_at TEXT,
     user_id INTEGER REFERENCES users(id)
 );
+
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY,
+    review_id INTEGER REFERENCES reviews(id),
+    user_id INTEGER REFERENCES users(id),
+    content TEXT,
+    sent_at TEXT
+);

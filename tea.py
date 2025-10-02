@@ -48,3 +48,15 @@ def variety_exists(variety_name):
     sql = "SELECT COUNT(*) FROM tea_varieties WHERE name = ?"
     count = db.query(sql, [variety_name])[0][0]
     return count > 0
+
+def get_comments(review_id):
+    sql = """SELECT c.id, c.content, c.sent_at, u.username 
+             FROM comments c 
+             JOIN users u ON c.user_id = u.id 
+             WHERE c.review_id = ? 
+             ORDER BY c.sent_at"""
+    return db.query(sql, [review_id])
+
+def add_comment(review_id, user_id, content):
+    sql = "INSERT INTO comments (review_id, user_id, content, sent_at) VALUES (?, ?, ?, datetime('now'))"
+    db.execute(sql, [review_id, user_id, content])
