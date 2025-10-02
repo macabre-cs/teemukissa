@@ -10,7 +10,7 @@
     <form action="/edit/{{ review.id }}" method="post">
       <p>
         Arvostelu:<br />
-        <textarea name="content" rows="5" cols="40">{{ review.content | show_lines }}</textarea>
+        <textarea name="content" rows="5" cols="40">{{ review.content }}</textarea>
       </p>
       <input type="submit" value="Lähetä" />
     </form>
