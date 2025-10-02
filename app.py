@@ -145,7 +145,7 @@ def register():
 
         try:
             users.create_user(username, password1)
-            success_message = "Tunnus luotu onnistuneesti!"
+            success_message = "Tunnus luotu onnistuneesti! Nyt voit kirjautua sisään uudella tunnuksellasi tai palata etusivulle."
             show_form = False
             
             user_id = users.check_login(username, password1)
