@@ -145,11 +145,12 @@ def register():
 
         try:
             users.create_user(username, password1)
-            success_message = "Tunnus luotu onnistuneesti! Nyt voit kirjautua sisään uudella tunnuksellasi tai palata etusivulle."
+            success_message = "Tunnus luotu onnistuneesti! Tervetuloa mukaan mauuhtavaan seuraan :3"
             show_form = False
             
             user_id = users.check_login(username, password1)
             session["user_id"] = user_id
+            session["username"] = username
             
         except sqlite3.IntegrityError:
             return "VIRHE: tunnus on jo varattu"
@@ -205,5 +206,6 @@ def show_image(user_id):
 
 @app.route("/logout")
 def logout():
-    del session["user_id"]
+    #del session["user_id"]
+    session.clear()
     return redirect("/")
