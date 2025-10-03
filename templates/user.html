@@ -2,15 +2,14 @@
 <html>
   <head>
     <title>Käyttäjä {{ profile_user.username }}</title>
-    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/main.css" />
   </head>
   <body>
     <h1>Käyttäjä {{ profile_user.username }}</h1>
 
     {% if profile_user.has_image %}
     <img src="/image/{{ profile_user.id }}" />
-    {% endif %}
-    {% if profile_user.id == logged_in_user %}
+    {% endif %} {% if profile_user.id == logged_in_user %}
     <p>
       <a href="/add_image">Lisää profiilikuva</a>
     </p>
@@ -31,6 +30,25 @@
           <a href="/remove/{{ review.id }}">Poista</a>
           {% endif %}
         </div>
+        <h3>Komentit:</h3>
+        <ul>
+          {% for comment in comments[review['id']] %}
+          <li>
+            <strong>{{ comment.username }}:</strong> {{ comment.content | show_lines }}
+            <em>({{ comment.sent_at }})</em>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <h4>Lisää kommentti:</h4>
+        <form action="/add_comment" method="POST">
+          <input type="hidden" name="review_id" value="{{ review['id'] }}" />
+          <input type="hidden" name="source" value="user" />
+          <textarea name="content" rows="2" cols="50" required placeholder="Kirjoita kommenttisi tähän..."></textarea
+          ><br />
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+          <input type="submit" value="Lisää kommentti" />
+        </form>
       </li>
       {% endfor %}
     </ul>

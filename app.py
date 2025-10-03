@@ -120,13 +120,21 @@ def add_comment():
     review_id = request.form["review_id"]
     content = request.form["content"]
     user_id = session["user_id"]
+    source = request.form["source"]
 
     if not content or len(content) > 5000:
         abort(403)
 
     tea.add_comment(review_id, user_id, content)
     review = tea.get_review(review_id)
-    return redirect(f"/tea/{review['variety']}")
+
+    if source == "tea":
+        return redirect(f"/tea/{review['variety']}")
+    elif source == "user":
+        return redirect(f"/user/{review['user_id']}")
+    else:
+        abort(400)
+    
     
 @app.route("/search")
 def search():
@@ -142,7 +150,8 @@ def show_user(user_id):
     
     reviews = users.get_reviews(user_id)
     logged_in_user = session["user_id"]
-    return render_template("user.html", profile_user=profile_user, reviews=reviews, logged_in_user=logged_in_user)
+    comments = {review['id']: tea.get_comments(review['id']) for review in reviews}
+    return render_template("user.html", profile_user=profile_user, reviews=reviews, comments=comments, logged_in_user=logged_in_user)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

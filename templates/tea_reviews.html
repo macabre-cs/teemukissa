@@ -33,6 +33,7 @@
         <h4>Lisää kommentti:</h4>
         <form action="/add_comment" method="POST">
           <input type="hidden" name="review_id" value="{{ review['id'] }}" />
+          <input type="hidden" name="source" value="tea" />
           <textarea name="content" rows="2" cols="50" required placeholder="Kirjoita kommenttisi tähän..."></textarea
           ><br />
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
