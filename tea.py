@@ -50,7 +50,7 @@ def variety_exists(variety_name):
     return count > 0
 
 def get_comments(review_id):
-    sql = """SELECT c.id, c.content, c.sent_at, u.username 
+    sql = """SELECT c.id, c.content, c.sent_at, u.username , c.user_id
              FROM comments c 
              JOIN users u ON c.user_id = u.id 
              WHERE c.review_id = ? 
