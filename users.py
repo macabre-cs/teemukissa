@@ -25,7 +25,7 @@ def get_user(user_id):
     return result[0] if result else None
 
 def get_reviews(user_id):
-    sql = """SELECT r.id, r.variety, r.content, r.sent_at, t.name AS variety_name 
+    sql = """SELECT r.id, r.variety, r.content, r.sent_at, r.rating, t.name AS variety_name 
              FROM reviews r 
              JOIN tea_varieties t ON r.variety = t.name 
              WHERE r.user_id = ?

@@ -13,6 +13,12 @@
     {% endif %}
 
     <form action="/add_review" method="POST">
+      <h2>Tassuarvosana:</h2>
+      <div>
+        {% for i in range(1, 6) %}
+        <label> <input type="radio" name="rating" value="{{ i }}" required /> {{ i }} </label>
+        {% endfor %}
+      </div>
       <h2>Valitse teelaatu</h2>
       <div>
         {% for variety in varieties %}

@@ -15,7 +15,8 @@ CREATE TABLE reviews (
     variety TEXT REFERENCES tea_varieties(name),
     content TEXT,
     sent_at TEXT,
-    user_id INTEGER REFERENCES users(id)
+    user_id INTEGER REFERENCES users(id),
+    rating INTEGER
 );
 
 CREATE TABLE comments (

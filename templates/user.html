@@ -18,18 +18,19 @@
     <p>Käyttäjä on lähettänyt {{ reviews | count }} arvostelua</p>
 
     {% if stats.most_reviewed_tea %}
-        <p>Eniten arvosteltu tee: {{ stats.most_reviewed_tea[0] }} ({{ stats.most_reviewed_tea[1] }} arvostelua)</p>
+    <p>Eniten arvosteltu tee: {{ stats.most_reviewed_tea[0] }} ({{ stats.most_reviewed_tea[1] }} arvostelua)</p>
     {% else %}
-        <p>Käyttäjä ei ole vielä arvostellut yhtään teetä.</p>
-    {% endif %}
-
-    {% if reviews %}
+    <p>Käyttäjä ei ole vielä arvostellut yhtään teetä.</p>
+    {% endif %} {% if reviews %}
     <h2>Arvostelut</h2>
     <ul>
       {% for review in reviews %}
       <li>
         <strong>{{ review.variety_name }}:</strong> {{ review.content | show_lines }}
         <em>({{ review.sent_at }})</em>
+        {% if review.rating %}
+        <p>Tassuarvosana: {{ review.rating }}</p>
+        {% endif %}
         <div class="actions">
           {% if profile_user.id == logged_in_user %}
           <a href="/edit/{{ review.id }}">Muokkaa</a> |
@@ -40,7 +41,8 @@
         <ul>
           {% for comment in comments[review['id']] %}
           <li>
-            <strong><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:</strong> {{ comment.content | show_lines }}
+            <strong><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:</strong> {{ comment.content |
+            show_lines }}
             <em>({{ comment.sent_at }})</em>
           </li>
           {% endfor %}

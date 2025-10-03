@@ -14,24 +14,24 @@ def populate_tea_varieties():
             db.execute(sql, [variety])
 
 def get_reviews(tea_variety):
-    sql = """SELECT r.id, r.content, r.sent_at, u.username, r.user_id 
+    sql = """SELECT r.id, r.content, r.sent_at, u.username, r.user_id, r.rating 
              FROM reviews r 
              JOIN users u ON r.user_id = u.id 
              WHERE r.variety = ?"""
     return db.query(sql, [tea_variety])
 
 def get_review(review_id):
-    sql = "SELECT id, variety, content, user_id FROM reviews WHERE id = ?"
+    sql = "SELECT id, variety, content, user_id, rating FROM reviews WHERE id = ?"
     result = db.query(sql, [review_id])
     return result[0] if result else None
 
-def add_review(variety, content, user_id):
-    sql = "INSERT INTO reviews (variety, content, sent_at, user_id) VALUES (?, ?, datetime('now'), ?)"
-    db.execute(sql, [variety, content, user_id])
+def add_review(variety, content, user_id, rating=None):
+    sql = "INSERT INTO reviews (variety, content, sent_at, user_id, rating) VALUES (?, ?, datetime('now'), ?, ?)"
+    db.execute(sql, [variety, content, user_id, rating])
 
-def update_review(review_id, content):
-    sql = "UPDATE reviews SET content = ? WHERE id = ?"
-    db.execute(sql, [content, review_id])
+def update_review(review_id, content, rating=None):
+    sql = "UPDATE reviews SET content = ?, rating = ? WHERE id = ?"
+    db.execute(sql, [content, rating, review_id])
 
 def delete_review(review_id):
     sql = "DELETE FROM reviews WHERE id = ?"
