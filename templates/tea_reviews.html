@@ -24,7 +24,7 @@
         <ul>
           {% for comment in comments[review['id']] %}
           <li>
-            <strong>{{ comment.username }}:</strong> {{ comment.content }}
+            <strong>{{ comment.username }}:</strong> {{ comment.content | show_lines }}
             <em>({{ comment.sent_at }})</em>
           </li>
           {% endfor %}
