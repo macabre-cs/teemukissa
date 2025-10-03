@@ -17,6 +17,12 @@
 
     <p>Käyttäjä on lähettänyt {{ reviews | count }} arvostelua</p>
 
+    {% if stats.most_reviewed_tea %}
+        <p>Eniten arvosteltu tee: {{ stats.most_reviewed_tea[0] }} ({{ stats.most_reviewed_tea[1] }} arvostelua)</p>
+    {% else %}
+        <p>Käyttäjä ei ole vielä arvostellut yhtään teetä.</p>
+    {% endif %}
+
     {% if reviews %}
     <h2>Arvostelut</h2>
     <ul>

@@ -56,3 +56,18 @@ def user_exists(user_id):
     sql = "SELECT COUNT(*) FROM users WHERE id = ?"
     count = db.query(sql, [user_id])[0][0]
     return count > 0
+
+def get_stats(user_id):
+    sql = """SELECT r.variety, COUNT(r.id) as review_count
+                                FROM reviews r
+                                WHERE r.user_id = ?
+                                GROUP BY r.variety
+                                ORDER BY review_count DESC
+                                LIMIT 1"""
+    most_reviewed_tea = db.query(sql, [user_id])
+    
+    stats = {
+        "most_reviewed_tea": most_reviewed_tea[0] if most_reviewed_tea else None
+    }
+    
+    return stats
