@@ -34,6 +34,9 @@ def update_review(review_id, content, rating=None):
     db.execute(sql, [content, rating, review_id])
 
 def delete_review(review_id):
+    sql = "DELETE FROM comments WHERE review_id = ?"
+    db.execute(sql, [review_id])
+
     sql = "DELETE FROM reviews WHERE id = ?"
     db.execute(sql, [review_id])
 
