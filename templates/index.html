@@ -11,8 +11,12 @@
     <h1>Teemukissa</h1>
   </div>
 
+  {% for message in messages %}
+    <p><strong>{{ message }}</strong></p>
+  {% endfor %}
+
   {% if session.user_id %}
-  <h3>Ihana nähdä {{ session["username"] }} :3</h3>
+    <h3>Ihana nähdä {{ session["username"] }} :3</h3>
   {% endif %}
   <p>
     <div class="nav">

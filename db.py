@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, time
 from flask import g
 
 def get_connection():
@@ -8,11 +8,22 @@ def get_connection():
     return con
 
 def execute(sql, params=[]):
-    con = get_connection()
-    result = con.execute(sql, params)
-    con.commit()
-    g.last_insert_id = result.lastrowid
-    con.close()
+    retries = 3
+    for attempt in range(retries):
+        try:
+            con = get_connection()
+            result = con.execute(sql, params)
+            con.commit()
+            g.last_insert_id = result.lastrowid
+            return result
+        except sqlite3.OperationalError as e:
+            if "database is locked" in str(e) and attempt < retries - 1:
+                print(f"Database is locked. Retrying... (Attempt {attempt + 1})")
+                time.sleep(1)
+            else:
+                raise e
+        finally:
+            con.close()
 
 def query(sql, params=[]):
     con = get_connection()

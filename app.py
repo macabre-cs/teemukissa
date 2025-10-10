@@ -1,6 +1,6 @@
 import sqlite3, secrets
 from flask import Flask
-from flask import redirect, render_template, request, session, abort, make_response, flash
+from flask import redirect, render_template, request, session, abort, make_response, flash, get_flashed_messages
 import config, users, tea
 import markupsafe
 
@@ -26,7 +26,7 @@ def show_lines(content):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", messages=get_flashed_messages())
 
 @app.route("/teatimes")
 def show_teatimes():
@@ -159,11 +159,8 @@ def show_user(user_id):
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    success_message = None
-    show_form = True
-
     if request.method == "GET":
-        return render_template("register.html", success_message=success_message, show_form=show_form)
+        return render_template("register.html", filled={})
 
     if request.method == "POST":
         username = request.form["username"]
@@ -179,22 +176,18 @@ def register():
 
         if password1 != password2:
             flash("VIRHE: turvakisut eivät ole samat")
-            return redirect("/register")
-
+            filled = {"username": username}
+            return render_template("register.html", filled=filled)
+        
         try:
             users.create_user(username, password1)
-            success_message = "Tunnus luotu onnistuneesti! Tervetuloa mukaan mauuhtavaan seuraan :3"
-            show_form = False
-            
-            user_id = users.check_login(username, password1)
-            session["user_id"] = user_id
-            session["username"] = username
+            flash("Tunnuksen luominen onnistui, voit nyt kirjautua sisään")
+            return redirect("/")
             
         except sqlite3.IntegrityError:
             flash("VIRHE: tunnus on jo varattu")
-            return redirect("/register")
-
-        return render_template("register.html", success_message=success_message, show_form=show_form)
+            filled = {"username": username}
+            return render_template("register.html", filled=filled)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
