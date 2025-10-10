@@ -153,7 +153,7 @@ def show_user(user_id):
     reviews = users.get_reviews(user_id)
     stats = users.get_stats(user_id)
 
-    logged_in_user = session["user_id"]
+    logged_in_user = session.get("user_id")
     comments = {review['id']: tea.get_comments(review['id']) for review in reviews}
     return render_template("user.html", profile_user=profile_user, reviews=reviews, comments=comments, logged_in_user=logged_in_user, stats=stats)
 
