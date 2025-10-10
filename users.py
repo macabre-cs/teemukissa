@@ -25,22 +25,11 @@ def get_user(user_id):
     return result[0] if result else None
 
 def get_reviews(user_id):
-    sql = """SELECT r.id, r.variety, r.content, r.sent_at, r.rating, t.name AS variety_name 
+    sql = """SELECT r.id, r.variety, r.title, r.content, r.sent_at, r.rating, t.name AS variety_name 
              FROM reviews r 
              JOIN tea_varieties t ON r.variety = t.name 
              WHERE r.user_id = ?
              ORDER BY r.sent_at DESC"""
-    return db.query(sql, [user_id])
-
-def get_messages(user_id):
-    sql = """SELECT m.id,
-                    m.thread_id,
-                    t.title thread_title,
-                    m.sent_at
-             FROM threads t, messages m
-             WHERE t.id = m.thread_id AND
-                   m.user_id = ?
-             ORDER BY m.sent_at DESC"""
     return db.query(sql, [user_id])
 
 def update_image(user_id, image):

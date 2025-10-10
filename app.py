@@ -52,6 +52,7 @@ def add_review():
         user_id = session["user_id"]
         content = request.form["content"]
         variety = request.form["variety"]
+        title = request.form["title"]
         rating = request.form.get("rating")
 
         if not tea.variety_exists(variety):
@@ -64,7 +65,7 @@ def add_review():
             abort(403)
 
         try:
-            tea.add_review(variety, content, user_id, int(rating))
+            tea.add_review(variety, title, content, user_id, int(rating))
         except sqlite3.IntegrityError:
             abort(403)
 
@@ -87,11 +88,12 @@ def edit_review(review_id):
     if request.method == "POST":
         check_csrf()
         content = request.form["content"]
+        title = request.form["title"]
         rating = request.form.get("rating")
         if not content or len(content) > 5000:
             abort(403)
 
-        tea.update_review(review_id, content, rating)
+        tea.update_review(review_id, title, content, rating)
         return redirect(f"/tea/{review["variety"]}")
 
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])

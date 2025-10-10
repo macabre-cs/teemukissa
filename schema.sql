@@ -13,6 +13,7 @@ CREATE TABLE tea_varieties (
 CREATE TABLE reviews (
     id INTEGER PRIMARY KEY,
     variety TEXT REFERENCES tea_varieties(name),
+    title, TEXT,
     content TEXT,
     sent_at TEXT,
     user_id INTEGER REFERENCES users(id),

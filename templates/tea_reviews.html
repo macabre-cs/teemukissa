@@ -11,6 +11,7 @@
     <div class="reviews">
       {% if reviews %} {% for review in reviews %}
       <div class="review">
+        <h3>{{ review.title }}</h3>
         <strong><a href="/user/{{ review.user_id }}">{{ review.username }}</a>:</strong>
         {{ review.content | show_lines }}
         <em>({{ review.sent_at }})</em>
@@ -52,6 +53,10 @@
     <h2>Lisää arvostelu teelle :3</h2>
     <form action="/add_review" method="POST">
       <input type="hidden" name="variety" value="{{ tea_variety }}" required />
+      <p>
+        <label for="title">Arvostelun otsikko:</label><br />
+        <input type="text" name="title" required placeholder="Kirjoita arvostelun otsikko" />
+      </p>
       <h4>Tassuarvosana:</h4>
       <div>
         {% for i in range(1, 6) %}

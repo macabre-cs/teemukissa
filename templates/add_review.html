@@ -13,6 +13,10 @@
     {% endif %}
 
     <form action="/add_review" method="POST">
+      <p>
+        <label for="title">Arvostelun otsikko:</label><br />
+        <input type="text" name="title" required placeholder="Kirjoita arvostelun otsikko" />
+      </p>
       <h2>Tassuarvosana:</h2>
       <div>
         {% for i in range(1, 6) %}

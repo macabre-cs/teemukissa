@@ -39,6 +39,7 @@
     <ul>
       {% for review in reviews %}
       <li>
+        <h3>{{ review.title }}</h3>
         <strong>{{ review.variety_name }}:</strong> {{ review.content | show_lines }}
         <em>({{ review.sent_at }})</em>
         {% if review.rating %}
