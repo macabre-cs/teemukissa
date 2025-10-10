@@ -1,5 +1,7 @@
 # Teemukissasovellus ≽^•⩊•^≼
 Tietokannat ja web-ohjelmointi harjoitustyö
+
+**Huom.** Kurssin vastuuopettajan kanssa sovittu, että loppupalautus on 26.10.2025 sairastumisen vuoksi.
 ```
             ⣤⡶⢶⣦⡀
 ⠀⠀⠀⣴⡿⠟⠷⠆⣠⠋⠀⠀⠀⢸⣿
