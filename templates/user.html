@@ -34,7 +34,9 @@
     <p>Eniten arvosteltu tee: {{ stats.most_reviewed_tea[0] }} ({{ stats.most_reviewed_tea[1] }} arvostelua)</p>
     {% else %}
     <p>Käyttäjä ei ole vielä arvostellut yhtään teetä.</p>
-    {% endif %} {% if reviews %}
+    {% endif %}
+    
+    {% if reviews %}
     <h2>Arvostelut</h2>
     <ul>
       {% for review in reviews %}
@@ -51,7 +53,9 @@
           <a href="/remove/{{ review.id }}">Poista</a>
           {% endif %}
         </div>
-        <h3>Komentit:</h3>
+
+        {% if comments[review.id] %}
+        <h4>Komentit:</h4>
         <ul>
           {% for comment in comments[review['id']] %}
           <li>
@@ -61,16 +65,7 @@
           </li>
           {% endfor %}
         </ul>
-
-        <h4>Lisää kommentti:</h4>
-        <form action="/add_comment" method="POST">
-          <input type="hidden" name="review_id" value="{{ review['id'] }}" />
-          <input type="hidden" name="source" value="user" />
-          <textarea name="content" rows="2" cols="50" required placeholder="Kirjoita kommenttisi tähän..."></textarea
-          ><br />
-          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-          <input type="submit" value="Lisää kommentti" />
-        </form>
+        {% endif %}
       </li>
       {% endfor %}
     </ul>
