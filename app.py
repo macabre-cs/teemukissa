@@ -178,7 +178,6 @@ def register():
             abort(403)
 
         if password1 != password2:
-            #return "VIRHE: turvakisut eivät ole samat"
             flash("VIRHE: turvakisut eivät ole samat")
             return redirect("/register")
 
@@ -194,7 +193,6 @@ def register():
         except sqlite3.IntegrityError:
             flash("VIRHE: tunnus on jo varattu")
             return redirect("/register")
-            #return "VIRHE: tunnus on jo varattu"
 
         return render_template("register.html", success_message=success_message, show_form=show_form)
 
