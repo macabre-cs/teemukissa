@@ -39,6 +39,15 @@ def tea_reviews(tea_variety):
     comments = {review['id']: tea.get_comments(review['id']) for review in reviews}
     return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety, comments=comments)
 
+@app.route("/review/<int:review_id>")
+def view_review(review_id):
+    review = tea.get_review(review_id)
+    if not review:
+        abort(404)
+
+    comments = tea.get_comments(review_id)
+    return render_template("review.html", review=review, comments=comments)
+
 @app.route("/add_review", methods=["GET", "POST"])
 def add_review():
     if request.method == "GET":
@@ -134,6 +143,8 @@ def add_comment():
 
     if source == "tea":
         return redirect(f"/tea/{review['variety']}")
+    if source == "review":
+        return redirect(f"/review/{review['id']}")
     elif source == "user":
         return redirect(f"/user/{review['user_id']}")
     else:

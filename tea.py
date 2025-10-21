@@ -21,7 +21,10 @@ def get_reviews(tea_variety):
     return db.query(sql, [tea_variety])
 
 def get_review(review_id):
-    sql = "SELECT id, variety, title, content, user_id, rating FROM reviews WHERE id = ?"
+    sql = """SELECT r.id, r.variety, r.title, r.content, r.user_id, r.rating, u.username, r.sent_at 
+             FROM reviews r 
+             JOIN users u ON r.user_id = u.id 
+             WHERE r.id = ?"""
     result = db.query(sql, [review_id])
     return result[0] if result else None
 

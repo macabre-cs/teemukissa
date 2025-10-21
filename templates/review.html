@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ review.variety }} arvostelu</title>
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+    <h1>{{ review.variety }} arvostelu</h1>
+    <h2>{{ review.title }}</h2>
+    <div class="review">
+      <strong><a href="/user/{{ review.user_id }}">{{ review.username }}:</a></strong> {{ review.content | show_lines }}
+      <em>({{ review.sent_at }})</em>
+      {% if review.rating %}
+      <p>Tassuarvosana: {{ review.rating }}</p>
+      {% endif %}
+      <div class="actions">
+        {% if review.user_id == session['user_id'] %}
+        <a href="/edit/{{ review.id }}">Muokkaa</a> |
+        <a href="/remove/{{ review.id }}">Poista</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <h3>Komentit:</h3>
+    <ul>
+      {% for comment in comments %}
+      <li>
+        <strong><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:</strong> {{ comment.content |
+        show_lines }}
+        <em>({{ comment.sent_at }})</em>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <h4>Lisää kommentti:</h4>
+    <form action="/add_comment" method="POST">
+      <input type="hidden" name="review_id" value="{{ review.id }}" />
+      <input type="hidden" name="source" value="review" />
+      <textarea name="content" rows="2" cols="50" required placeholder="Kirjoita kommenttisi tähän..."></textarea><br />
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" value="Lisää kommentti" />
+    </form>
+
+    <a href="/tea/{{ review.variety }}">Takaisin teearvosteluihin</a>
+  </body>
+</html>

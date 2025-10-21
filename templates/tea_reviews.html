@@ -11,7 +11,7 @@
     <div class="reviews">
       {% if reviews %} {% for review in reviews %}
       <div class="review">
-        <h3>{{ review.title }}</h3>
+        <h3><a href="/review/{{ review.id }}">{{ review.title }}</a></h3>
         <strong><a href="/user/{{ review.user_id }}">{{ review.username }}</a>:</strong>
         {{ review.content | show_lines }}
         <em>({{ review.sent_at }})</em>
