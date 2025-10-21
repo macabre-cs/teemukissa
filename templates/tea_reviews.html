@@ -8,6 +8,18 @@
     <div class="header">
       <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
     </div>
+    <nav class="nav">
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | 
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/user/{{ session.user_id }}">Oma profiili</a>
+      {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      {% endif %}
+    </nav>
 
     {% if reviews %} {% for review in reviews %}
     <div class="review">
@@ -73,10 +85,6 @@
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" value="Lähetä :3" />
       </form>
-    </div>
-
-    <div class="buttons">
-      <a href="/teatimes">Takaisin valikkoon!</a>
     </div>
   </body>
 </html>

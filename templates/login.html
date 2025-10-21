@@ -9,6 +9,14 @@
       <h1>Kirjaudu sisään</h1>
     </div>
 
+    <nav class="nav">
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | 
+      <a href="/register">Luo tunnus</a>
+    </nav>
+
     {% for message in get_flashed_messages() %}
     <p><strong>{{ message }}</strong></p>
     {% endfor %}
@@ -23,11 +31,6 @@
 
         <input type="submit" value="Kirjaudu" />
       </form>
-    </div>
-
-    <div class="buttons">
-      <a href="/">Etusivulle :3</a> |
-      <a href="/register">Luo tunnus</a>
     </div>
   </body>
 </html>

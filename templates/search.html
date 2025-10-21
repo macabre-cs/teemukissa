@@ -13,11 +13,17 @@
     <h3>Mitäs etsit {{ session["username"] }}?</h3>
     {% endif %}
 
-    <div class="nav">
+    <nav class="nav">
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/">Etusivu</a> | 
       {% if session.user_id %}
-      <a href="/logout">Kirjaudu ulos</a> | {% else %} <a href="/login">Kirjaudu sisään</a> | {% endif %}
-      <a href="/">Etusivulle</a>
-    </div>
+      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/user/{{ session.user_id }}">Oma profiili</a>
+      {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      {% endif %}
+    </nav>
 
     <div class="form">
       <form action="/search" method="get">

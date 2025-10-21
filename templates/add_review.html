@@ -9,13 +9,25 @@
       <h1>Lisää arvostelu</h1>
     </div>
 
+    <nav class="nav">
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | 
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/user/{{ session.user_id }}">Oma profiili</a>
+      {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      {% endif %}
+    </nav>
+
     {% if session.user_id %}
     <h3>Tee vaan maistuu. Eikö niin {{ session["username"] }}?</h3>
     {% endif %}
 
     <div class="create-review">
       <form action="/add_review" method="POST">
-        <label for="title">Arvostelun otsikko:</label><br />
+        <h4>Arvostelun otsikko:</h4>
         <input type="text" name="title" required placeholder="Kirjoita arvostelun otsikko" />
 
         <h4>Tassuarvosana:</h4>

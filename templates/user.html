@@ -7,16 +7,18 @@
   <body>
     <h1>Käyttäjä {{ profile_user.username }}</h1>
 
-    <div class="nav">
-      <p>
-        <a href="/search">Haku</a> | <a href="/">Etusivulle</a> | {% if session.user_id %}
-        <a href="/logout">Kirjaudu ulos</a> |
-        <a href="/user/{{ session.user_id }}">Oma profiili</a>
-        {% else %}
-        <a href="/login">Kirjaudu sisään</a>
-        {% endif %}
-      </p>
-    </div>
+    <nav class="nav">
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | 
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/user/{{ session.user_id }}">Oma profiili</a>
+      {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      {% endif %}
+    </nav>
 
     {% if profile_user.has_image %}
     <img src="/image/{{ profile_user.id }}" alt="Profiilikuva" />

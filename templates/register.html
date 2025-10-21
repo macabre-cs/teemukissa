@@ -9,6 +9,19 @@
       <h1>Luo tunnus</h1>
     </div>
 
+    <nav class="nav">
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | 
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/user/{{ session.user_id }}">Oma profiili</a>
+      {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      {% endif %}
+    </nav>
+
     {% for message in get_flashed_messages() %}
     <p><strong>{{ message }}</strong></p>
     {% endfor %}
@@ -26,11 +39,6 @@
 
         <input type="submit" value="Luo tunnus" />
       </form>
-    </div>
-
-    <div class="buttons">
-      <a href="/">Etusivulle</a> | <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> |
-      <a href="/search">Hae teehetkiä</a>
     </div>
   </body>
 </html>

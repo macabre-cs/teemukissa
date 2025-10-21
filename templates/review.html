@@ -10,14 +10,16 @@
     </header>
 
     <nav class="nav">
-      <p>
-        <a href="/search">Haku</a> | <a href="/">Etusivulle</a> | {% if session.user_id %}
-        <a href="/logout">Kirjaudu ulos</a> |
-        <a href="/user/{{ session.user_id }}">Oma profiili</a>
-        {% else %}
-        <a href="/login">Kirjaudu sisään</a>
-        {% endif %}
-      </p>
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | 
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/user/{{ session.user_id }}">Oma profiili</a>
+      {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      {% endif %}
     </nav>
 
     <section class="review">
@@ -69,7 +71,7 @@
     </section>
 
     <div class="buttons">
-      <a href="/tea/{{ review.variety }}">Takaisin teearvosteluihin</a>
+      <a href="/tea/{{ review.variety }}">Takaisin {{ review.variety }} arvosteluihin</a>
     </div>
   </body>
 </html>
