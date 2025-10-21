@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Poista arvostelu</title>
-    <link rel="stylesheet" href="/static/main.css">
-</head>
-<body>
-    <h1>Poista arvostelu</h1>
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Poista arvostelu</h1>
+    </div>
 
-    <form action="/remove/{{ review.id }}" method="post">
-        <p>
-            Haluatko varmasti poistaa arvostelun?
-        </p>
+    <div class="create-review">
+      <form action="/remove/{{ review.id }}" method="post">
+        <p>Haluatko varmasti poistaa arvostelun?</p>
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" name="continue" value="Jatka" />
         <input type="submit" name="cancel" value="Peruuta" />
-    </form>
-</body>
+      </form>
+    </div>
+
+    <div class="buttons">
+      <a href="/review/{{ review.id }}">Takaisin arvosteluun</a>
+    </div>
+  </body>
 </html>

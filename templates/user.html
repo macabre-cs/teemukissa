@@ -7,25 +7,23 @@
   <body>
     <h1>Käyttäjä {{ profile_user.username }}</h1>
 
-  <p>
     <div class="nav">
-    <a href="/search">Haku</a> |
-    <a href="/">Etusivulle</a> |
-    {% if session.user_id %}
-    <a href="/logout">Kirjaudu ulos</a> |
-    <a href="/user/{{ session.user_id }}">Oma profiili</a>
-    {% else %}
-    <a href="/login">Kirjaudu sisään</a>
-    {% endif %}
+      <p>
+        <a href="/search">Haku</a> | <a href="/">Etusivulle</a> | {% if session.user_id %}
+        <a href="/logout">Kirjaudu ulos</a> |
+        <a href="/user/{{ session.user_id }}">Oma profiili</a>
+        {% else %}
+        <a href="/login">Kirjaudu sisään</a>
+        {% endif %}
+      </p>
     </div>
-  </p>
 
     {% if profile_user.has_image %}
-    <img src="/image/{{ profile_user.id }}" />
+    <img src="/image/{{ profile_user.id }}" alt="Profiilikuva" />
     {% endif %} {% if profile_user.id == logged_in_user %}
-    <p>
-      <a href="/add_image">Lisää profiilikuva</a>
-    </p>
+    <div class="add-picture">
+      <p><a href="/add_image">Lisää profiilikuva</a></p>
+    </div>
     {% endif %}
 
     <p>Käyttäjä on lähettänyt {{ reviews | count }} arvostelua</p>
@@ -34,41 +32,45 @@
     <p>Eniten arvosteltu tee: {{ stats.most_reviewed_tea[0] }} ({{ stats.most_reviewed_tea[1] }} arvostelua)</p>
     {% else %}
     <p>Käyttäjä ei ole vielä arvostellut yhtään teetä.</p>
-    {% endif %}
-    
-    {% if reviews %}
-    <h2>Arvostelut</h2>
-    <ul>
-      {% for review in reviews %}
-      <li>
-        <h3><a href="/review/{{ review.id }}">{{ review.title }}</a></h3>
-        <strong>{{ review.variety_name }}:</strong> {{ review.content | show_lines }}
-        <em>({{ review.sent_at }})</em>
-        {% if review.rating %}
-        <p>Tassuarvosana: {{ review.rating }}</p>
-        {% endif %}
-        <div class="actions">
-          {% if profile_user.id == logged_in_user %}
-          <a href="/edit/{{ review.id }}">Muokkaa</a> |
-          <a href="/remove/{{ review.id }}">Poista</a>
-          {% endif %}
-        </div>
+    {% endif %} {% if reviews %}
+    <div class="reviews">
+      <h2>Arvostelut</h2>
+      <ul>
+        {% for review in reviews %}
+        <li class="review">
+          <h3><a href="/review/{{ review.id }}">{{ review.title }}</a></h3>
+          <strong>{{ review.variety_name }}:</strong> {{ review.content | show_lines }}
+          <em>({{ review.sent_at }})</em>
 
-        {% if comments[review.id] %}
-        <h4>Komentit:</h4>
-        <ul>
-          {% for comment in comments[review['id']] %}
-          <li>
-            <strong><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:</strong> {{ comment.content |
-            show_lines }}
-            <em>({{ comment.sent_at }})</em>
-          </li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-      </li>
-      {% endfor %}
-    </ul>
+          {% if review.rating %}
+          <p>Tassuarvosana: {{ review.rating }}</p>
+          {% endif %}
+
+          <div class="actions">
+            {% if profile_user.id == logged_in_user %}
+            <a href="/edit/{{ review.id }}">Muokkaa</a> |
+            <a href="/remove/{{ review.id }}">Poista</a>
+            {% endif %}
+          </div>
+
+          {% if comments[review.id] %}
+          <div class="comments">
+            <h4>Kommentit:</h4>
+            <ul>
+              {% for comment in comments[review.id] %}
+              <li class="comment">
+                <strong> <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>: </strong>
+                {{ comment.content | show_lines }}
+                <em>({{ comment.sent_at }})</em>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
     {% else %}
     <p>Käyttäjä ei ole kirjoittanut vielä arvosteluita!</p>
     {% endif %}

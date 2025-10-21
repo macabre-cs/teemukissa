@@ -8,70 +8,75 @@
     <div class="header">
       <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
     </div>
-    <div class="reviews">
-      {% if reviews %} {% for review in reviews %}
-      <div class="review">
-        <h3><a href="/review/{{ review.id }}">{{ review.title }}</a></h3>
+
+    {% if reviews %} {% for review in reviews %}
+    <div class="review">
+      <h3><a href="/review/{{ review.id }}">{{ review.title }}</a></h3>
+      <p>
         <strong><a href="/user/{{ review.user_id }}">{{ review.username }}</a>:</strong>
         {{ review.content | show_lines }}
         <em>({{ review.sent_at }})</em>
-        {% if review.rating %}
-        <p>Tassuarvosana: {{ review.rating }}</p>
+      </p>
+
+      {% if review.rating %}
+      <p>Tassuarvosana: {{ review.rating }}</p>
+      {% endif %}
+
+      <div class="actions">
+        {% if review.user_id == session["user_id"] %}
+        <a href="/edit/{{ review.id }}">Muokkaa</a> |
+        <a href="/remove/{{ review.id }}">Poista</a>
         {% endif %}
-        <div class="actions">
-          {% if review.user_id == session["user_id"] %}
-          <a href="/edit/{{ review.id }}">Muokkaa</a> |
-          <a href="/remove/{{ review.id }}">Poista</a>
-          {% endif %}
-        </div>
-        <h3>Komentit:</h3>
+      </div>
+
+      {% if comments[review['id']] %}
+      <div class="comments">
+        <h4>Komentit:</h4>
         <ul>
           {% for comment in comments[review['id']] %}
-          <li>
-            <strong><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:</strong> {{ comment.content |
-            show_lines }}
+          <li class="comment">
+            <strong><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:</strong>
+            {{ comment.content | show_lines }}
             <em>({{ comment.sent_at }})</em>
           </li>
           {% endfor %}
         </ul>
-
-        <h4>Lisää kommentti:</h4>
-        <form action="/add_comment" method="POST">
-          <input type="hidden" name="review_id" value="{{ review['id'] }}" />
-          <input type="hidden" name="source" value="tea" />
-          <textarea name="content" rows="2" cols="50" required placeholder="Kirjoita kommenttisi tähän..."></textarea
-          ><br />
-          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-          <input type="submit" value="Lisää kommentti" />
-        </form>
       </div>
-      {% endfor %} {% else %}
-      <p>Ei vielä arvosteluita tälle teelle!</p>
       {% endif %}
-    </div>
 
-    <h2>Lisää arvostelu teelle :3</h2>
-    <form action="/add_review" method="POST">
-      <input type="hidden" name="variety" value="{{ tea_variety }}" required />
-      <p>
-        <label for="title">Arvostelun otsikko:</label><br />
+      <form action="/add_comment" method="POST" class="create-review">
+        <input type="hidden" name="review_id" value="{{ review['id'] }}" />
+        <input type="hidden" name="source" value="tea" />
+        <textarea name="content" rows="2" required placeholder="Kirjoita kommenttisi tähän..."></textarea><br />
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+        <input type="submit" value="Lisää kommentti" />
+      </form>
+    </div>
+    {% endfor %} {% else %}
+    <p>Ei vielä arvosteluita tälle teelle!</p>
+    {% endif %}
+
+    <div class="create-review">
+      <h2>Lisää arvostelu teelle :3</h2>
+      <form action="/add_review" method="POST">
+        <input type="hidden" name="variety" value="{{ tea_variety }}" required />
+
+        <h4>Arvostelun otsikko:</h4>
         <input type="text" name="title" required placeholder="Kirjoita arvostelun otsikko" />
-      </p>
-      <h4>Tassuarvosana:</h4>
-      <div>
+
+        <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
-            <label>
-                <input type="radio" name="rating" value="{{ i }}" required /> {{ i }}
-            </label>
+        <label> <input type="radio" name="rating" value="{{ i }}" required /> {{ i }} </label>
         {% endfor %}
+
+        <textarea name="content" rows="4" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+        <input type="submit" value="Lähetä :3" />
+      </form>
     </div>
 
-      <textarea name="content" rows="4" cols="50" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea
-      ><br />
-      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-      <input type="submit" value="Lähetä :3" />
-    </form>
-
-    <a href="/teatimes">Takaisin valikkoon!</a>
+    <div class="buttons">
+      <a href="/teatimes">Takaisin valikkoon!</a>
+    </div>
   </body>
 </html>

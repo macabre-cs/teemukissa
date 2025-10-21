@@ -8,38 +8,39 @@
     <div class="header">
       <h1>Lisää arvostelu</h1>
     </div>
+
     {% if session.user_id %}
     <h3>Tee vaan maistuu. Eikö niin {{ session["username"] }}?</h3>
     {% endif %}
 
-    <form action="/add_review" method="POST">
-      <p>
+    <div class="create-review">
+      <form action="/add_review" method="POST">
         <label for="title">Arvostelun otsikko:</label><br />
         <input type="text" name="title" required placeholder="Kirjoita arvostelun otsikko" />
-      </p>
-      <h2>Tassuarvosana:</h2>
-      <div>
+
+        <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
         <label> <input type="radio" name="rating" value="{{ i }}" required /> {{ i }} </label>
         {% endfor %}
-      </div>
-      <h2>Valitse teelaatu</h2>
-      <div>
+
+        <h4>Valitse teelaatu:</h4>
         {% for variety in varieties %}
         <label>
           <input type="radio" name="variety" value="{{ variety[0] }}" required />
           {{ variety[0].capitalize() }} </label
         ><br />
         {% endfor %}
-      </div>
 
-      <h2>Arvostelusi</h2>
-      <textarea name="content" rows="4" cols="50" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea
-      ><br />
-      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-      <input type="submit" value="Lähetä :3" />
-    </form>
+        <h4>Arvostelusi:</h4>
+        <textarea name="content" rows="4" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
 
-    <a href="/teatimes">Takaisin valikkoon!</a>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+        <input type="submit" value="Lähetä :3" />
+      </form>
+    </div>
+
+    <div class="buttons">
+      <a href="/teatimes">Takaisin valikkoon!</a>
+    </div>
   </body>
 </html>

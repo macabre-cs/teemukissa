@@ -5,27 +5,32 @@
     <link rel="stylesheet" href="/static/main.css" />
   </head>
   <body>
-    <h1>Muokkaa arvostelua</h1>
+    <div class="header">
+      <h1>Muokkaa arvostelua</h1>
+    </div>
 
-    <form action="/edit/{{ review.id }}" method="post">
-      <h4>Arvostelun otsikko:</h4>
-      <p>
+    <div class="create-review">
+      <form action="/edit/{{ review.id }}" method="post">
+        <h4>Arvostelun otsikko:</h4>
         <input type="text" name="title" value="{{ review.title }}" required />
-      </p>
-      <h4>Tassuarvosana:</h4>
-      <div>
+
+        <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
         <label>
           <input type="radio" name="rating" value="{{ i }}" {% if review.rating == i %}checked{% endif %} /> {{ i }}
         </label>
         {% endfor %}
-      </div>
-      <h4>Arvostelu:</h4>
-      <p>
-        <textarea name="content" rows="5" cols="40" required>{{ review.content }}</textarea>
-      </p>
-      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-      <input type="submit" value="Lähetä" />
-    </form>
+
+        <h4>Arvostelu:</h4>
+        <textarea name="content" rows="5" required>{{ review.content }}</textarea>
+
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+        <input type="submit" value="Lähetä" />
+      </form>
+    </div>
+
+    <div class="buttons">
+      <a href="/review/{{ review.id }}">Takaisin arvosteluun</a>
+    </div>
   </body>
 </html>

@@ -1,49 +1,37 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Teehetket</title>
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Teehetket</h1>
+    </header>
 
-<head>
-  <title>Teehetket</title>
-  <link rel="stylesheet" href="/static/main.css">
-</head>
-
-<body>
-  <div class="header">
-    <h1>Teehetket</h1>
-  </div>
-  {% if session.user_id %}
-  <h3>Mikäs mauuustuisi {{ session["username"] }}?</h3>
-  {% endif %}
-
-  <p>
-    <div class="nav">
-    <a href="/search">Haku</a> |
-    <a href="/">Etusivulle</a> |
     {% if session.user_id %}
-    <a href="/logout">Kirjaudu ulos</a> |
-    <a href="/user/{{ session.user_id }}">Oma profiili</a>
-    {% else %}
-    <a href="/login">Kirjaudu sisään</a>
+    <h3>Mikäs mauuustuisi {{ session["username"] }}?</h3>
     {% endif %}
-    </div>
-  </p>
-  <hr />
 
-  <div class="buttons">
-    {% for variety in varieties %}
-        <a href="/tea/{{ variety.name }}">{{ variety.name.capitalize() }}</a>
-        {% if not loop.last %} | {% endif %}
-    {% endfor %}
-  </div>
+    <nav class="nav">
+      <a href="/search">Haku</a> | <a href="/">Etusivulle</a> | {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/user/{{ session.user_id }}">Oma profiili</a>
+      {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      {% endif %}
+    </nav>
 
-  {% if session.user_id %}
-  <hr />
-  <p>
     <div class="buttons">
-    <a href="/add_review">Lisää teehetki</a>
+      {% for variety in varieties %}
+      <a href="/tea/{{ variety.name }}">{{ variety.name.capitalize() }}</a>
+      {% if not loop.last %} | {% endif %} {% endfor %}
     </div>
-  </p>
-  <hr />
-  {% endif %}
-</body>
 
+    {% if session.user_id %}
+    <div class="buttons">
+      <a href="/add_review">Lisää teehetki</a>
+    </div>
+    {% endif %}
+  </body>
 </html>

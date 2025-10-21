@@ -1,37 +1,33 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Kirjaudu sisään</title>
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Kirjaudu sisään</h1>
+    </div>
 
-<head>
-  <title>Kirjaudu sisään</title>
-  <link rel="stylesheet" href="/static/main.css">
-</head>
+    {% for message in get_flashed_messages() %}
+    <p><strong>{{ message }}</strong></p>
+    {% endfor %}
 
-<body>
-  <h1>Kirjaudu sisään</h1>
+    <div class="form">
+      <form action="/login" method="post">
+        <label for="username">Tunnus:</label>
+        <input type="text" name="username" required />
 
-  {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
-  {% endfor %}
+        <label for="password">Turvakisu:</label>
+        <input type="password" name="password" required />
 
-  <form action="/login" method="post">
-    <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
-    </p>
-    <p>
-      Turvakisu: <br />
-      <input type="password" name="password" />
-    </p>
-    <input type="submit" value="Kirjaudu" />
-  </form>
+        <input type="submit" value="Kirjaudu" />
+      </form>
+    </div>
 
-  <hr />
-  <p>
-    <a href="/">Etusivulle :3</a> | 
-    <a href="/register">Luo tunnus</a>
-  </p>
-</body>
-
+    <div class="buttons">
+      <a href="/">Etusivulle :3</a> |
+      <a href="/register">Luo tunnus</a>
+    </div>
+  </body>
 </html>

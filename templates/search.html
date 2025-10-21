@@ -2,34 +2,30 @@
 <html>
   <head>
     <title>Haku</title>
-    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/main.css" />
   </head>
   <body>
     <div class="header">
       <h1>Haku</h1>
     </div>
+
     {% if session.user_id %}
     <h3>Mitäs etsit {{ session["username"] }}?</h3>
     {% endif %}
-    <p>
-      {% if session.user_id %}
-      <a href="/logout">Kirjaudu ulos</a> |
-      {% else %}
-      <a href="/login">Kirjaudu sisään</a> |
-      {% endif %}
-      <a href="/">Etusivulle</a>
-    </p>
 
-    <form action="/search" method="get">
-      <p>
-        Hakusana: {% if query %}
-        <input type="text" name="query" value="{{ query }}" />
-        {% else %}
-        <input type="text" name="query" />
-        {% endif %}
-      </p>
-      <input type="submit" value="Hae" />
-    </form>
+    <div class="nav">
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> | {% else %} <a href="/login">Kirjaudu sisään</a> | {% endif %}
+      <a href="/">Etusivulle</a>
+    </div>
+
+    <div class="form">
+      <form action="/search" method="get">
+        <label for="query">Hakusana:</label>
+        <input type="text" name="query" value="{{ query if query else '' }}" required />
+        <input type="submit" value="Hae" />
+      </form>
+    </div>
 
     {% if query is not none %}
     <hr />
@@ -41,7 +37,7 @@
       <li>
         <strong>{{ result.variety.capitalize() }}:</strong> {{ result.content | show_lines }}
         <br />
-        <em> <a href="/user/{{ result.user_id }}">{{ result.username }}</a> ({{ result.sent_at }}) </em>
+        <em><a href="/user/{{ result.user_id }}">{{ result.username }}</a> ({{ result.sent_at }})</em>
       </li>
       {% endfor %}
     </ul>

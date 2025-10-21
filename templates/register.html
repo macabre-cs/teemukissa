@@ -2,40 +2,35 @@
 <html>
   <head>
     <title>Luo tunnus :3</title>
-    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/main.css" />
   </head>
   <body>
-    <h1>Luo tunnus</h1>
+    <div class="header">
+      <h1>Luo tunnus</h1>
+    </div>
 
     {% for message in get_flashed_messages() %}
-    <p>
-      <b>{{ message }}</b>
-    </p>
+    <p><strong>{{ message }}</strong></p>
     {% endfor %}
-    <form action="/register" method="post">
-      <p>
-        Tunnus: <br />
-        <input type="text" name="username" value="{{ filled.username }}" maxlength="30" required />
-      </p>
-      <p>
-        Turvakisu: <br />
-        <input type="password" name="password1" maxlength="30" required />
-      </p>
-      <p>
-        Turvakisu uudestaan: <br />
-        <input type="password" name="password2" maxlength="30" required />
-      </p>
-      <input type="submit" value="Luo tunnus" />
-    </form>
 
-    <hr />
-    <p>
-      <div class="buttons">
-        <a href="/">Etusivulle</a> |
-        <a href="/teatimes">Teehetket</a> |
-        <a href="/add_review">Lisää teehetki</a> |
-        <a href="/search">Hae teehetkiä</a>
-      </div>
-  </p>
+    <div class="form">
+      <form action="/register" method="post">
+        <label for="username">Tunnus:</label>
+        <input type="text" name="username" value="{{ filled.username }}" maxlength="30" required />
+
+        <label for="password1">Turvakisu:</label>
+        <input type="password" name="password1" maxlength="30" required />
+
+        <label for="password2">Turvakisu uudestaan:</label>
+        <input type="password" name="password2" maxlength="30" required />
+
+        <input type="submit" value="Luo tunnus" />
+      </form>
+    </div>
+
+    <div class="buttons">
+      <a href="/">Etusivulle</a> | <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Hae teehetkiä</a>
+    </div>
   </body>
 </html>
