@@ -14,11 +14,8 @@
     {% endif %}
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> |
-      <a href="/add_review">Lisää teehetki</a> |
-      <a href="/">Etusivu</a> | 
-      {% if session.user_id %}
-      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> | <a href="/">Etusivu</a> | {% if
+      session.user_id %} <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
@@ -34,19 +31,21 @@
     </div>
 
     {% if query is not none %}
-    <hr />
     <h2>Tulokset</h2>
 
     {% if results %}
-    <ul>
-      {% for result in results %}
-      <li>
-        <strong>{{ result.variety.capitalize() }}:</strong> {{ result.content | show_lines }}
-        <br />
-        <em><a href="/user/{{ result.user_id }}">{{ result.username }}</a> ({{ result.sent_at }})</em>
-      </li>
-      {% endfor %}
-    </ul>
+    <div class="reviews">
+      <ul>
+        {% for result in results %}
+        <li class="review">
+          <h3><a href="/review/{{ result.id }}">{{ result.title }}</a></h3>
+          <strong>{{ result.variety.capitalize() }}:</strong> {{ result.content | show_lines }}
+          <br />
+          <em><a href="/user/{{ result.user_id }}">{{ result.username }}</a> ({{ result.sent_at }})</em>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
     {% else %}
     <p>Mitään ei löytynyt!</p>
     {% endif %} {% endif %}

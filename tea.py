@@ -44,11 +44,12 @@ def delete_review(review_id):
     db.execute(sql, [review_id])
 
 def search_reviews(query):
-    sql = """SELECT r. title, r.content, r.sent_at, r.variety, u.username, u.id AS user_id 
+    sql = """SELECT r.title, r.content, r.sent_at, r.variety, r.rating, r.id, u.username, u.id AS user_id 
              FROM reviews r 
              JOIN users u ON r.user_id = u.id 
-             WHERE r.content LIKE ?"""
-    return db.query(sql, ["%" + query + "%"])
+             WHERE r.content LIKE ? OR r.title LIKE ? OR u.username LIKE ? OR r.variety LIKE ?"""
+    params = ["%" + query + "%"] * 4
+    return db.query(sql, params)
 
 def variety_exists(variety_name):
     sql = "SELECT COUNT(*) FROM tea_varieties WHERE name = ?"
