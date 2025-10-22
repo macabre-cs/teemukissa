@@ -199,3 +199,39 @@ body {
 a {
     color: #a77d5e;
 }
+
+.profile-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+    margin-top: 25px;
+    padding: 15px;
+    border: 1px solid #f0d8c0;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.profile-picture img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #e0cbb7;
+    background-color: #fffdfc;
+    display: block;
+    margin: 0 auto;
+}
+
+.add-picture p {
+    margin-top: 8px;
+    font-size: 0.95em;
+}
+
+.add-picture a {
+    color: #8c6b4f;
+}
+
+.profile-stats p {
+    margin: 6px 0;
+}
+

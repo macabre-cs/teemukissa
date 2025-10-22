@@ -8,44 +8,43 @@
     <h1>Käyttäjä {{ profile_user.username }}</h1>
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> |
-      <a href="/add_review">Lisää teehetki</a> |
-      <a href="/search">Haku</a> |
-      <a href="/">Etusivu</a> | 
-      {% if session.user_id %}
-      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> | <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | {% if session.user_id %} <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
       {% endif %}
     </nav>
 
-    {% if profile_user.has_image %}
-    <img src="/image/{{ profile_user.id }}" alt="Profiilikuva" />
-    {% endif %} {% if profile_user.id == logged_in_user %}
-    <div class="add-picture">
-      <p><a href="/add_image">Lisää profiilikuva</a></p>
+    <div class="profile-header">
+      <div class="profile-picture">
+        {% if profile_user.has_image %}
+        <img src="/image/{{ profile_user.id }}" alt="Profiilikuva" />
+        {% endif %} {% if profile_user.id == logged_in_user %}
+        <div class="add-picture">
+          <p><a href="/add_image">Lisää profiilikuva</a></p>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="profile-stats">
+        <p>Käyttäjä on jakanut {{ reviews | count }} teehetkeä</p>
+
+        {% if stats.most_reviewed_tea %}
+        <p>Eniten maisteltu tee: {{ stats.most_reviewed_tea[0] }} ({{ stats.most_reviewed_tea[1] }} arvostelua)</p>
+        {% else %}
+        <p>Käyttäjä ei ole vielä antanut yhtään tassuarvosanaa teehetkelle</p>
+        {% endif %} {% if stats.average_rating %}
+        <p>Keskimääräinen tassuarvosana: {{ stats.average_rating | round(1) }}</p>
+        {% else %}
+        <p>Käyttäjä ei ole vielä arvostellut yhtään teehetkeä</p>
+        {% endif %}
+
+        <p>Käyttäjä on kirjoittanut muiden käyttäjien teehetkiin {{ stats.comments_given }} kommenttia</p>
+        <p>Käyttäjä on saanut {{ stats.comments_received }} kommenttia omiin teehetkiinsä</p>
+      </div>
     </div>
-    {% endif %}
 
-    <p>Käyttäjä on jakanut {{ reviews | count }} teehetkeä</p>
-
-    {% if stats.most_reviewed_tea %}
-    <p>Eniten maisteltu tee: {{ stats.most_reviewed_tea[0] }} ({{ stats.most_reviewed_tea[1] }} arvostelua)</p>
-    {% else %}
-    <p>Käyttäjä ei ole vielä antanut yhtään tassuarvosanaa teehetkelle</p>
-    {% endif %}
-
-    {% if stats.average_rating %}
-    <p>Keskimääräinen tassuarvosana: {{ stats.average_rating | round(1) }}</p>
-    {% else %}
-
-    <p>Käyttäjä ei ole vielä arvostellut yhtään teehetkeä</p>
-    {% endif %}
-
-    <p>Käyttäjä on kirjoittanut muiden käyttäjien teehetkiin {{ stats.comments_given }} kommenttia</p>
-    <p>Käyttäjä on saanut {{ stats.comments_received }} kommenttia omiin teehetkiinsä</p>
-    
     {% if reviews %}
     <div class="reviews">
       <h2>Arvostelut</h2>
