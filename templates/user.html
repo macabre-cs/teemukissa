@@ -34,7 +34,16 @@
     <p>Eniten arvosteltu tee: {{ stats.most_reviewed_tea[0] }} ({{ stats.most_reviewed_tea[1] }} arvostelua)</p>
     {% else %}
     <p>Käyttäjä ei ole vielä arvostellut yhtään teetä.</p>
-    {% endif %} {% if reviews %}
+    {% endif %}
+
+    {% if stats.average_rating %}
+    <p>Käyttäjän keskimääräinen tassuarvosana: {{ stats.average_rating | round(1) }}</p>
+    {% else %}
+
+    <p>Käyttäjä ei ole vielä antanut arvioita.</p>
+    {% endif %}
+    
+    {% if reviews %}
     <div class="reviews">
       <h2>Arvostelut</h2>
       <ul>

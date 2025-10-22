@@ -47,16 +47,23 @@ def user_exists(user_id):
     return count > 0
 
 def get_stats(user_id):
-    sql = """SELECT r.variety, COUNT(r.id) as review_count
+    sql_most_reviewed = """SELECT r.variety, COUNT(r.id) as review_count
                                 FROM reviews r
                                 WHERE r.user_id = ?
                                 GROUP BY r.variety
                                 ORDER BY review_count DESC
                                 LIMIT 1"""
-    most_reviewed_tea = db.query(sql, [user_id])
-    
+    most_reviewed_tea = db.query(sql_most_reviewed, [user_id])
+
+    sql_avg_rating = """SELECT AVG(r.rating) as average_rating
+                        FROM reviews r
+                        WHERE r.user_id = ?"""
+    avg_rating_result = db.query(sql_avg_rating, [user_id])
+    average_rating = avg_rating_result[0]['average_rating'] if avg_rating_result else None
+
     stats = {
-        "most_reviewed_tea": most_reviewed_tea[0] if most_reviewed_tea else None
+        "most_reviewed_tea": most_reviewed_tea[0] if most_reviewed_tea else None,
+        "average_rating": average_rating
     }
     
     return stats
