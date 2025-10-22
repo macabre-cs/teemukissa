@@ -61,9 +61,24 @@ def get_stats(user_id):
     avg_rating_result = db.query(sql_avg_rating, [user_id])
     average_rating = avg_rating_result[0]['average_rating'] if avg_rating_result else None
 
+    sql_comments_given = """SELECT COUNT(*) as comments_given
+                            FROM comments c
+                            WHERE c.user_id = ?"""
+    comments_given_result = db.query(sql_comments_given, [user_id])
+    comments_given = comments_given_result[0]['comments_given'] if comments_given_result else 0
+
+    sql_comments_received = """SELECT COUNT(*) as comments_received
+                               FROM comments c
+                               JOIN reviews r ON c.review_id = r.id
+                               WHERE r.user_id = ?"""
+    comments_received_result = db.query(sql_comments_received, [user_id])
+    comments_received = comments_received_result[0]['comments_received'] if comments_received_result else 0
+
     stats = {
         "most_reviewed_tea": most_reviewed_tea[0] if most_reviewed_tea else None,
-        "average_rating": average_rating
+        "average_rating": average_rating,
+        "comments_given": comments_given,
+        "comments_received": comments_received
     }
-    
+
     return stats
