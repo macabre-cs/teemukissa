@@ -64,6 +64,22 @@ def get_comments(review_id):
              ORDER BY c.sent_at"""
     return db.query(sql, [review_id])
 
+def get_comment(comment_id):
+    sql = """SELECT c.id, c.content, c.sent_at, c.user_id, u.username, c.review_id
+             FROM comments c
+             JOIN users u ON c.user_id = u.id
+             WHERE c.id = ?"""
+    result = db.query(sql, [comment_id])
+    return result[0] if result else None
+
 def add_comment(review_id, user_id, content):
     sql = "INSERT INTO comments (review_id, user_id, content, sent_at) VALUES (?, ?, ?, datetime('now'))"
     db.execute(sql, [review_id, user_id, content])
+
+def edit_comment(comment_id, content):
+    sql = """UPDATE comments SET content = ? WHERE id = ?"""
+    db.execute(sql, [content, comment_id])
+
+def delete_comment(comment_id):
+    sql = """DELETE FROM comments WHERE id = ?"""
+    db.execute(sql, [comment_id])

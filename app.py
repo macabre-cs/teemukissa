@@ -149,6 +149,40 @@ def add_comment():
         return redirect(f"/user/{review['user_id']}")
     else:
         abort(400)
+
+@app.route("/edit_comment", methods=["POST"])
+def edit_comment():
+    check_csrf()
+    require_login()
+
+    comment_id = request.form.get("comment_id")
+    review_id = request.form.get("review_id")
+    content = request.form.get("content")
+
+    if not content or len(content) > 5000:
+        abort(403)
+
+    comment = tea.get_comment(comment_id)
+    if comment["user_id"] != session["user_id"]:
+        abort(403)
+
+    tea.edit_comment(comment_id, content)
+    return redirect(f"/review/{review_id}")
+
+@app.route("/delete_comment", methods=["POST"])
+def delete_comment():
+    check_csrf()
+    require_login()
+
+    comment_id = request.form.get("comment_id")
+    review_id = request.form.get("review_id")
+
+    comment = tea.get_comment(comment_id)
+    if comment["user_id"] != session["user_id"]:
+        abort(403)
+    
+    tea.delete_comment(comment_id)
+    return redirect(f"/review/{review_id}") 
     
     
 @app.route("/search")

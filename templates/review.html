@@ -10,12 +10,8 @@
     </header>
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> |
-      <a href="/add_review">Lisää teehetki</a> |
-      <a href="/search">Haku</a> |
-      <a href="/">Etusivu</a> | 
-      {% if session.user_id %}
-      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> | <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | {% if session.user_id %} <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
@@ -49,9 +45,34 @@
       <ul>
         {% for comment in comments %}
         <li class="comment">
-          <strong> <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>: </strong>
-          {{ comment.content | show_lines }}
+          <strong><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:</strong>
+          <span id="comment-{{ comment.id }}">{{ comment.content | show_lines }}</span>
           <em>({{ comment.sent_at }})</em>
+
+          {% if comment.user_id == session['user_id'] %}
+          <input type="checkbox" id="edit-toggle-{{ comment.id }}" class="edit-toggle" hidden />
+
+          <div class="comment-actions">
+            <label for="edit-toggle-{{ comment.id }}" class="text-button">Muokkaa</label>
+            <form action="/delete_comment" method="POST" class="inline-form">
+              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+              <input type="hidden" name="comment_id" value="{{ comment.id }}" />
+              <input type="hidden" name="review_id" value="{{ review.id }}" />
+              <button type="submit" class="text-button">Poista</button>
+            </form>
+          </div>
+
+          <form action="/edit_comment" method="POST" class="edit-form">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+            <input type="hidden" name="comment_id" value="{{ comment.id }}" />
+            <input type="hidden" name="review_id" value="{{ review.id }}" />
+            <textarea name="content" rows="2" required>{{ comment.content }}</textarea>
+            <div class="edit-actions">
+              <button type="submit" class="text-button">Tallenna</button>
+              <label for="edit-toggle-{{ comment.id }}" class="cancel-button">Peruuta</label>
+            </div>
+          </form>
+          {% endif %}
         </li>
         {% endfor %}
       </ul>
