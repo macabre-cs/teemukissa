@@ -35,6 +35,21 @@ def get_paginated_reviews(reviews, page, page_size):
 
     return paginated_reviews, page_count, page
 
+def get_paginated_comments(comments, page, page_size):
+    total_comments = len(comments)
+    page_count = math.ceil(total_comments / page_size)
+
+    if page < 1:
+        return [], page_count, 1
+    if page > page_count:
+        return [], page_count, page_count
+
+    start = (page - 1) * page_size
+    end = start + page_size
+    paginated_comments = comments[start:end]
+
+    return paginated_comments, page_count, page
+
 @app.template_filter()
 def show_lines(content):
     content = str(markupsafe.escape(content))
@@ -64,14 +79,16 @@ def tea_reviews(tea_variety, page=1):
                            comments_count=comments_count, page=current_page, page_count=page_count)
 
 @app.route("/review/<int:review_id>")
-def view_review(review_id):
+@app.route("/review/<int:review_id>/<int:page>")
+def view_review(review_id, page=1):
     review = tea.get_review(review_id)
     if not review:
         flash("Teehetkeä ei löytynyt.")
         abort(404)
 
-    comments = tea.get_comments(review_id)
-    return render_template("review.html", review=review, comments=comments)
+    all_comments = tea.get_comments(review_id)
+    paginated_comments, page_count, current_page = get_paginated_comments(all_comments, page, 5)
+    return render_template("review.html", review=review, comments=paginated_comments, page=current_page, page_count=page_count)
 
 @app.route("/add_review", methods=["GET", "POST"])
 def add_review():
