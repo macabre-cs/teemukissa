@@ -48,7 +48,7 @@ def search_reviews(query):
              FROM reviews r 
              JOIN users u ON r.user_id = u.id 
              WHERE r.content LIKE ? OR r.title LIKE ? OR u.username LIKE ? OR r.variety LIKE ?"""
-    params = ["%" + query + "%"] * 4
+    params = [query + "%", query + "%", query + "%", query + "%"]
     return db.query(sql, params)
 
 def variety_exists(variety_name):
