@@ -84,7 +84,7 @@
       <form action="/add_comment" method="POST">
         <input type="hidden" name="review_id" value="{{ review.id }}" />
         <input type="hidden" name="source" value="review" />
-        <textarea name="content" rows="2" required placeholder="Kirjoita kommenttisi tähän..."></textarea>
+        <textarea name="content" rows="2" maxlength="1000" required placeholder="Kirjoita kommenttisi tähän..."></textarea>
         <br />
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" value="Lisää kommentti" />

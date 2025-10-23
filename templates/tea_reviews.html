@@ -59,7 +59,7 @@
       <form action="/add_comment" method="POST" class="create-review">
         <input type="hidden" name="review_id" value="{{ review['id'] }}" />
         <input type="hidden" name="source" value="tea" />
-        <textarea name="content" rows="2" required placeholder="Kirjoita kommenttisi tähän..."></textarea><br />
+        <textarea name="content" rows="2" maxlength="1000" required placeholder="Kirjoita kommenttisi tähän..."></textarea><br />
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" value="Lisää kommentti" />
       </form>
@@ -74,14 +74,14 @@
         <input type="hidden" name="variety" value="{{ tea_variety }}" required />
 
         <h4>Arvostelun otsikko:</h4>
-        <input type="text" name="title" required placeholder="Kirjoita arvostelun otsikko" />
+        <input type="text" name="title" maxlength="100" required placeholder="Kirjoita arvostelun otsikko" />
 
         <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
         <label> <input type="radio" name="rating" value="{{ i }}" required /> {{ i }} </label>
         {% endfor %}
 
-        <textarea name="content" rows="4" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
+        <textarea name="content" rows="4" maxlength="5000" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" value="Lähetä :3" />
       </form>

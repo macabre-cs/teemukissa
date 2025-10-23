@@ -72,6 +72,9 @@ def add_review():
 
         if not content or len(content) > 5000:
             abort(403)
+        
+        if not title or len(title) > 100:
+            abort(403)
 
         try:
             tea.add_review(variety, title, content, user_id, int(rating))
@@ -100,6 +103,8 @@ def edit_review(review_id):
         title = request.form["title"]
         rating = request.form.get("rating")
         if not content or len(content) > 5000:
+            abort(403)
+        if not title or len(title) > 100:
             abort(403)
 
         tea.update_review(review_id, title, content, rating)
@@ -135,11 +140,18 @@ def add_comment():
     user_id = session["user_id"]
     source = request.form["source"]
 
-    if not content or len(content) > 5000:
+    review = tea.get_review(review_id)
+    if review is None:
+        flash("Review not found.")
+        abort(404)
+
+    if review["user_id"] != session["user_id"]:
+        abort(403)
+
+    if not content or len(content) > 1000:
         abort(403)
 
     tea.add_comment(review_id, user_id, content)
-    review = tea.get_review(review_id)
 
     if source == "tea":
         return redirect(f"/tea/{review['variety']}")
@@ -159,10 +171,13 @@ def edit_comment():
     review_id = request.form.get("review_id")
     content = request.form.get("content")
 
+    comment = tea.get_comment(comment_id)
+    if comment is None:
+        abort(404)
+
     if not content or len(content) > 5000:
         abort(403)
 
-    comment = tea.get_comment(comment_id)
     if comment["user_id"] != session["user_id"]:
         abort(403)
 
@@ -178,12 +193,14 @@ def delete_comment():
     review_id = request.form.get("review_id")
 
     comment = tea.get_comment(comment_id)
+    if comment is None:
+        abort(404)
+
     if comment["user_id"] != session["user_id"]:
         abort(403)
     
     tea.delete_comment(comment_id)
     return redirect(f"/review/{review_id}") 
-    
     
 @app.route("/search")
 def search():

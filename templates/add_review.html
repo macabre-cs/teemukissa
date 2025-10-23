@@ -28,7 +28,7 @@
     <div class="create-review">
       <form action="/add_review" method="POST">
         <h4>Arvostelun otsikko:</h4>
-        <input type="text" name="title" required placeholder="Kirjoita arvostelun otsikko" />
+        <input type="text" name="title" maxlength="100" required placeholder="Kirjoita arvostelun otsikko" />
 
         <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
@@ -44,8 +44,7 @@
         {% endfor %}
 
         <h4>Arvostelusi:</h4>
-        <textarea name="content" rows="4" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
-
+        <textarea name="content" rows="4" maxlength="5000" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" value="Lähetä :3" />
       </form>
