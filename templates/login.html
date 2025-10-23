@@ -10,15 +10,13 @@
     </div>
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> |
-      <a href="/add_review">Lisää teehetki</a> |
-      <a href="/search">Haku</a> |
-      <a href="/">Etusivu</a> | 
+      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> | <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> |
       <a href="/register">Luo tunnus</a>
     </nav>
 
     {% for message in get_flashed_messages() %}
-    <p><strong>{{ message }}</strong></p>
+    <div class="message">{{ message }}</div>
     {% endfor %}
 
     <div class="form">

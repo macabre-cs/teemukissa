@@ -9,8 +9,8 @@
       <h1>Teemukissa</h1>
     </header>
 
-    {% for message in messages %}
-    <p><strong>{{ message }}</strong></p>
+    {% for message in get_flashed_messages() %}
+    <div class="message">{{ message }}</div>
     {% endfor %} {% if session.user_id %}
     <h3>Ihana nähdä {{ session["username"] }} :3</h3>
     {% endif %}

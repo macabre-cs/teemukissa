@@ -25,7 +25,7 @@
     <p>Lähetä jpg-tiedosto, jonka koko on enintään 100 kt</p>
 
     {% for message in get_flashed_messages() %}
-    <p><strong>{{ message }}</strong></p>
+    <div class="message">{{ message }}</div>
     {% endfor %}
 
     <div class="form">

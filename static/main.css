@@ -246,6 +246,18 @@ label.text-button {
   margin: 6px 0;
 }
 
+.message {
+  border: 1px solid #f0d8c0;
+  background-color: #fff7f5;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin: 15px 0;
+  color: #7b5741;
+  font-weight: bold;
+  text-align: center;
+}
+
+
 a {
   color: #a77d5e;
 }
