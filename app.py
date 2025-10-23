@@ -38,8 +38,9 @@ def show_teatimes():
 @app.route("/tea/<tea_variety>")
 def tea_reviews(tea_variety):
     reviews = tea.get_reviews(tea_variety)
-    comments = {review['id']: tea.get_comments(review['id']) for review in reviews}
-    return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety, comments=comments)
+    comments_count = {review['id']: len(tea.get_comments(review['id'])) for review in reviews}
+
+    return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety, comments_count=comments_count)
 
 @app.route("/review/<int:review_id>")
 def view_review(review_id):
@@ -244,8 +245,8 @@ def show_user(user_id):
     stats = users.get_stats(user_id)
 
     logged_in_user = session.get("user_id")
-    comments = {review['id']: tea.get_comments(review['id']) for review in reviews}
-    return render_template("user.html", profile_user=profile_user, reviews=reviews, comments=comments, logged_in_user=logged_in_user, stats=stats)
+    comments_count = {review['id']: len(tea.get_comments(review['id'])) for review in reviews}
+    return render_template("user.html", profile_user=profile_user, reviews=reviews, logged_in_user=logged_in_user, stats=stats, comments_count=comments_count)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

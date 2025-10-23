@@ -51,7 +51,7 @@
 
     {% if reviews %}
     <div class="reviews">
-      <h2>Arvostelut</h2>
+      <h2>Käyttäjän teehetket</h2>
       <ul>
         {% for review in reviews %}
         <li class="review">
@@ -61,6 +61,8 @@
 
           {% if review.rating %}
           <p>Tassuarvosana: {{ review.rating }}</p>
+          {% endif %} {% if comments_count[review.id] %}
+          <p>Teehetkeä on kommentoitu {{ comments_count[review.id] }} kertaa!</p>
           {% endif %}
 
           <div class="actions">
@@ -69,22 +71,8 @@
             <a href="/remove/{{ review.id }}">Poista</a>
             {% endif %}
           </div>
-
-          {% if comments[review.id] %}
-          <div class="comments">
-            <h4>Kommentit:</h4>
-            <ul>
-              {% for comment in comments[review.id] %}
-              <li class="comment">
-                <strong> <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>: </strong>
-                {{ comment.content | show_lines }}
-                <em>({{ comment.sent_at }})</em>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% endif %}
         </li>
+
         {% endfor %}
       </ul>
     </div>
