@@ -1,4 +1,4 @@
-import sqlite3, secrets
+import sqlite3, secrets, math
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, make_response, flash, get_flashed_messages
 import config, users, tea
@@ -20,6 +20,21 @@ def check_csrf():
         flash("CSRF-tarkistus epäonnistui >:/")
         abort(403)
 
+def get_paginated_reviews(reviews, page, page_size):
+    total_reviews = len(reviews)
+    page_count = math.ceil(total_reviews / page_size)
+
+    if page < 1:
+        return [], page_count, 1
+    if page > page_count:
+        return [], page_count, page_count
+
+    start = (page - 1) * page_size
+    end = start + page_size
+    paginated_reviews = reviews[start:end]
+
+    return paginated_reviews, page_count, page
+
 @app.template_filter()
 def show_lines(content):
     content = str(markupsafe.escape(content))
@@ -36,11 +51,17 @@ def show_teatimes():
     return render_template("teatimes.html", varieties=varieties)
 
 @app.route("/tea/<tea_variety>")
-def tea_reviews(tea_variety):
-    reviews = tea.get_reviews(tea_variety)
+@app.route("/tea/<tea_variety>/<int:page>")
+def tea_reviews(tea_variety, page=1):
+    page_size = 10
+    all_reviews = tea.get_reviews(tea_variety)
+
+    reviews, page_count, current_page = get_paginated_reviews(all_reviews, page, page_size)
+
     comments_count = {review['id']: len(tea.get_comments(review['id'])) for review in reviews}
 
-    return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety, comments_count=comments_count)
+    return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety, 
+                           comments_count=comments_count, page=current_page, page_count=page_count)
 
 @app.route("/review/<int:review_id>")
 def view_review(review_id):
@@ -229,24 +250,44 @@ def delete_comment():
     return redirect(f"/review/{review_id}")
     
 @app.route("/search")
-def search():
+@app.route("/search/<int:page>")
+def search(page=1):
     query = request.args.get("query")
-    results = tea.search_reviews(query) if query else []
-    return render_template("search.html", query=query, results=results)
+
+    page_size = 10
+
+    if not query:
+        return render_template("search.html", query=query, results=[], page=1, page_count=1)
+
+    results = tea.search_reviews(query)
+
+    paginated_results, page_count, current_page = get_paginated_reviews(results, page, page_size)
+
+    if page < 1:
+        return redirect(f"/search/1?query={query}")
+    if page > page_count:
+        return redirect(f"/search/{page_count}?query={query}")
+
+    return render_template("search.html", query=query, results=paginated_results, page=current_page, page_count=page_count)
 
 @app.route("/user/<int:user_id>")
-def show_user(user_id):
+@app.route("/user/<int:user_id>/<int:page>")
+def show_user(user_id, page=1):
     profile_user = users.get_user(user_id)
     if not profile_user:
         flash("Käyttäjätunnusta ei löytynyt :<")
         abort(404)
     
-    reviews = users.get_reviews(user_id)
-    stats = users.get_stats(user_id)
+    all_reviews = users.get_reviews(user_id)
+    reviews, page_count, current_page = get_paginated_reviews(all_reviews, page, 10)
 
+    stats = users.get_stats(user_id)
     logged_in_user = session.get("user_id")
     comments_count = {review['id']: len(tea.get_comments(review['id'])) for review in reviews}
-    return render_template("user.html", profile_user=profile_user, reviews=reviews, logged_in_user=logged_in_user, stats=stats, comments_count=comments_count)
+
+    return render_template("user.html", profile_user=profile_user, reviews=reviews, 
+                           logged_in_user=logged_in_user, stats=stats, 
+                           comments_count=comments_count, page=current_page, page_count=page_count)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

@@ -49,6 +49,13 @@
         </li>
         {% endfor %}
       </ul>
+      <p>
+        {% if page > 1 %}
+        <a href="/search/{{ page - 1 }}?query={{ query }}">&lt;&lt; Edellinen</a>
+        {% endif %} Sivu {{ page }}/{{ page_count }} {% if page < page_count %}
+        <a href="/search/{{ page + 1 }}?query={{ query }}">Seuraava &gt;&gt;</a>
+        {% endif %}
+      </p>
     </div>
     {% else %}
     <p>Mitään ei löytynyt!</p>
