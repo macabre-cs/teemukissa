@@ -21,6 +21,10 @@
       {% endif %}
     </nav>
 
+    {% for message in get_flashed_messages() %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+
     {% if reviews %} {% for review in reviews %}
     <div class="review">
       <h3><a href="/review/{{ review.id }}">{{ review.title | show_lines }}</a></h3>

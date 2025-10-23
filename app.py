@@ -12,10 +12,12 @@ with app.app_context():
 
 def require_login():
     if "user_id" not in session:
+        flash("Sinun täytyy olla kirjautunut sisään!!!!!!!")
         abort(403)
 
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
+        flash("CSRF-tarkistus epäonnistui >:/")
         abort(403)
 
 @app.template_filter()
@@ -43,6 +45,7 @@ def tea_reviews(tea_variety):
 def view_review(review_id):
     review = tea.get_review(review_id)
     if not review:
+        flash("Teehetkeä ei löytynyt.")
         abort(404)
 
     comments = tea.get_comments(review_id)
@@ -65,22 +68,28 @@ def add_review():
         rating = request.form.get("rating")
 
         if not tea.variety_exists(variety):
+            flash("Teelaatua ei löytynyt ?__?")
             abort(403)
 
         if not users.user_exists(user_id):
+            flash("Käyttäjätunnusta ei löytynyt >:(")
             abort(403)
 
         if not content or len(content) > 5000:
+            flash("Teehetken sisältö on liian pitkä tai puuttuu :(")
             abort(403)
         
         if not title or len(title) > 80:
+            flash("Teehetken otsikko on liian pitkä tai puuttuu :<")
             abort(403)
 
         try:
             tea.add_review(variety, title, content, user_id, int(rating))
         except sqlite3.IntegrityError:
+            flash("Teehetken lisääminen epäonnistui ;__;")
             abort(403)
 
+        flash("Teehetken lisääminen onnistui! :3")
         return redirect(f"/tea/{variety}")
 
 @app.route("/edit/<int:review_id>", methods=["GET", "POST"])
@@ -89,9 +98,11 @@ def edit_review(review_id):
 
     review = tea.get_review(review_id)
     if not review:
+        flash("Teehetkeä ei löytynyt???")
         abort(404)
     
     if review["user_id"] != session["user_id"]:
+        flash("Et voi muokata toisten teehetkiä >:(")
         abort(403)
 
     if request.method == "GET":
@@ -103,11 +114,14 @@ def edit_review(review_id):
         title = request.form["title"]
         rating = request.form.get("rating")
         if not content or len(content) > 5000:
+            flash("Teehetken sisältö on liian pitkä tai puuttuu :(")
             abort(403)
         if not title or len(title) > 80:
+            flash("Teehetken otsikko on liian pitkä tai puuttuu :<")
             abort(403)
 
         tea.update_review(review_id, title, content, rating)
+        flash("Teehetken muokkaaminen onnistui! :3")
         return redirect(f"/tea/{review["variety"]}")
 
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])
@@ -116,9 +130,11 @@ def remove_review(review_id):
 
     review = tea.get_review(review_id)
     if not review:
+        flash("Nani?! Teehetkeä ei löytynyt!!")
         abort(404)
 
     if review["user_id"] != session["user_id"]:
+        flash("Et voi poistaa toisten teehetkiä >:( Tuhma kisu!!")
         abort(403)
 
     if request.method == "GET":
@@ -128,6 +144,7 @@ def remove_review(review_id):
         check_csrf()
         if "continue" in request.form:
             tea.delete_review(review_id)
+            flash("Teehetken poistaminen onnistui! :>")
         return redirect(f"/tea/{review["variety"]}")
     
 @app.route("/add_comment", methods=["POST"])
@@ -142,16 +159,19 @@ def add_comment():
 
     review = tea.get_review(review_id)
     if review is None:
-        flash("Review not found.")
+        flash("Teehetkeä ei löytynyt :<")
         abort(404)
 
-    if review["user_id"] != session["user_id"]:
-        abort(403)
+    if not users.user_exists(user_id):
+            flash("Käyttäjätunnusta ei löytynyt >:(")
+            abort(403)
 
     if not content or len(content) > 1000:
+        flash("Kommentti on liian pitkä tai puuttuu :<")
         abort(403)
 
     tea.add_comment(review_id, user_id, content)
+    flash("Kommentin lisääminen onnistui! :3")
 
     if source == "tea":
         return redirect(f"/tea/{review['variety']}")
@@ -173,15 +193,19 @@ def edit_comment():
 
     comment = tea.get_comment(comment_id)
     if comment is None:
+        flash("Kommenttia ei löytynyt :<")
         abort(404)
 
     if not content or len(content) > 5000:
+        flash("Kommentti on liian pitkä tai puuttuu :(")
         abort(403)
 
     if comment["user_id"] != session["user_id"]:
+        flash("Et voi muokata toisten kommentteja >:(")
         abort(403)
 
     tea.edit_comment(comment_id, content)
+    flash("Kommentin muokkaaminen onnistui! :3")
     return redirect(f"/review/{review_id}")
 
 @app.route("/delete_comment", methods=["POST"])
@@ -194,13 +218,16 @@ def delete_comment():
 
     comment = tea.get_comment(comment_id)
     if comment is None:
+        flash("Kommenttia ei löytynyt :<")
         abort(404)
 
     if comment["user_id"] != session["user_id"]:
+        flash("Et voi poistaa toisten kommentteja >:(")
         abort(403)
     
     tea.delete_comment(comment_id)
-    return redirect(f"/review/{review_id}") 
+    flash("Kommentin poistaminen onnistui! :O")
+    return redirect(f"/review/{review_id}")
     
 @app.route("/search")
 def search():
@@ -212,6 +239,7 @@ def search():
 def show_user(user_id):
     profile_user = users.get_user(user_id)
     if not profile_user:
+        flash("Käyttäjätunnusta ei löytynyt :<")
         abort(404)
     
     reviews = users.get_reviews(user_id)
@@ -232,24 +260,27 @@ def register():
         password2 = request.form["password2"]
 
         if not username or len(username) > 30:
+            flash("Käyttäjätunnus on liian pitkä tai puuttuu!")
             abort(403)
         if not password1 or len(password1) > 30:
+            flash("Turvakisu on liian pitkä tai puuttuu!")
             abort(403)
         if not password2 or len(password2) > 30:
+            flash("Turvakisu on liian pitkä tai puuttuu!")
             abort(403)
 
         if password1 != password2:
-            flash("VIRHE: turvakisut eivät ole samat")
+            flash("Turvakisut eivät ole samat!!!")
             filled = {"username": username}
             return render_template("register.html", filled=filled)
         
         try:
             users.create_user(username, password1)
-            flash("Tunnuksen luominen onnistui, voit nyt kirjautua sisään")
+            flash("Käyttäjätunnuksen luominen onnistui, voit nyt kirjautua sisään :3")
             return redirect("/")
             
         except sqlite3.IntegrityError:
-            flash("VIRHE: tunnus on jo varattu")
+            flash("Käyttäjätunnus on jo varattu :(")
             filled = {"username": username}
             return render_template("register.html", filled=filled)
 
@@ -269,7 +300,7 @@ def login():
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
-            flash("VIRHE: väärä tunnus tai turvakisu")
+            flash("Väärä käyttäjätunnus tai turvakisu! :<")
             return redirect("/login")
         
 @app.route("/add_image", methods=["GET", "POST"])
@@ -283,23 +314,24 @@ def add_image():
         check_csrf()
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
-            flash("VIRHE: Lähettämäsi tiedosto ei ole jpg-tiedosto")
+            flash("Lähettämäsi tiedosto ei ole jpg-tiedosto! :O")
             return redirect("/add_image")
 
         image = file.read()
         if len(image) > 100 * 1024:
-            flash("VIRHE: Lähettämäsi tiedosto on liian suuri")
+            flash("Lähettämäsi tiedosto on liian suuri ;)))")
             return redirect("/add_image")
 
         user_id = session["user_id"]
         users.update_image(user_id, image)
-        flash("Kuvan lisääminen onnistui")
+        flash("Kuvan lisääminen onnistui!! :3")
         return redirect("/user/" + str(user_id))
     
 @app.route("/image/<int:user_id>")
 def show_image(user_id):
     image = users.get_image(user_id)
     if not image:
+        flash("Kuvaa ei löytynyt :(")
         abort(404)
 
     response = make_response(bytes(image))
@@ -309,4 +341,5 @@ def show_image(user_id):
 @app.route("/logout")
 def logout():
     session.clear()
+    flash("Olet nyt kirjautunut ulos. Nähdään taas pian! :3")
     return redirect("/")

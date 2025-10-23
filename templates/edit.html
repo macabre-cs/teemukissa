@@ -22,6 +22,10 @@
       {% endif %}
     </nav>
 
+    {% for message in get_flashed_messages() %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+
     <div class="create-review">
       <form action="/edit/{{ review.id }}" method="post">
         <h4>Arvostelun otsikko:</h4>

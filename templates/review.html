@@ -18,6 +18,10 @@
       {% endif %}
     </nav>
 
+    {% for message in get_flashed_messages() %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+
     <section class="review">
       <h2>{{ review.title | show_lines }}</h2>
 

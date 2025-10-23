@@ -16,6 +16,10 @@
       {% endif %}
     </nav>
 
+    {% for message in get_flashed_messages() %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+
     <div class="profile-header">
       <div class="profile-picture">
         {% if profile_user.has_image %}
