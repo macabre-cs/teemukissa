@@ -122,7 +122,7 @@ def edit_review(review_id):
 
         tea.update_review(review_id, title, content, rating)
         flash("Teehetken muokkaaminen onnistui! :3")
-        return redirect(f"/tea/{review["variety"]}")
+        return redirect(f"/review/{review["id"]}")
 
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])
 def remove_review(review_id):
@@ -145,7 +145,7 @@ def remove_review(review_id):
         if "continue" in request.form:
             tea.delete_review(review_id)
             flash("Teehetken poistaminen onnistui! :>")
-        return redirect(f"/tea/{review["variety"]}")
+        return redirect(f"/teatimes")
     
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
@@ -175,10 +175,8 @@ def add_comment():
 
     if source == "tea":
         return redirect(f"/tea/{review['variety']}")
-    if source == "review":
+    elif source == "review":
         return redirect(f"/review/{review['id']}")
-    elif source == "user":
-        return redirect(f"/user/{review['user_id']}")
     else:
         abort(400)
 
