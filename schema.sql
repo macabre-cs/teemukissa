@@ -27,3 +27,11 @@ CREATE TABLE comments (
     content TEXT,
     sent_at TEXT
 );
+
+CREATE UNIQUE INDEX idx_username ON users(username);
+CREATE UNIQUE INDEX idx_tea_variety_name ON tea_varieties(name);
+CREATE INDEX idx_reviews_variety ON reviews(variety);
+CREATE INDEX idx_reviews_variety ON reviews(variety);
+CREATE INDEX idx_reviews_user_id ON reviews(user_id);
+CREATE INDEX idx_comments_review_id ON comments(review_id);
+CREATE INDEX idx_comments_user_id ON comments(user_id);

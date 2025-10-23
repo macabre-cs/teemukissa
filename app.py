@@ -1,11 +1,21 @@
-import sqlite3, secrets, math
+import sqlite3, secrets, math, time
 from flask import Flask
-from flask import redirect, render_template, request, session, abort, make_response, flash, get_flashed_messages
+from flask import redirect, render_template, request, session, abort, make_response, flash, get_flashed_messages, g
 import config, users, tea
 import markupsafe
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
+    return response
 
 with app.app_context():
     tea.populate_tea_varieties()
