@@ -32,7 +32,7 @@ def check_csrf():
 
 def get_paginated_reviews(reviews, page, page_size):
     total_reviews = len(reviews)
-    page_count = math.ceil(total_reviews / page_size)
+    page_count = max(1, math.ceil(total_reviews / page_size))
 
     if page < 1:
         return [], page_count, 1

@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS tea_varieties;
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS comments;
+
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
     username TEXT UNIQUE,
@@ -13,7 +18,7 @@ CREATE TABLE tea_varieties (
 CREATE TABLE reviews (
     id INTEGER PRIMARY KEY,
     variety TEXT REFERENCES tea_varieties(name),
-    title, TEXT,
+    title TEXT,
     content TEXT,
     sent_at TEXT,
     user_id INTEGER REFERENCES users(id),
@@ -30,8 +35,11 @@ CREATE TABLE comments (
 
 CREATE UNIQUE INDEX idx_username ON users(username);
 CREATE UNIQUE INDEX idx_tea_variety_name ON tea_varieties(name);
-CREATE INDEX idx_reviews_variety ON reviews(variety);
+
 CREATE INDEX idx_reviews_variety ON reviews(variety);
 CREATE INDEX idx_reviews_user_id ON reviews(user_id);
+CREATE INDEX idx_reviews_title ON reviews(title);
+CREATE INDEX idx_reviews_content ON reviews(content);
+
 CREATE INDEX idx_comments_review_id ON comments(review_id);
 CREATE INDEX idx_comments_user_id ON comments(user_id);

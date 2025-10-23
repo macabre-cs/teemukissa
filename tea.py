@@ -17,7 +17,8 @@ def get_reviews(tea_variety):
     sql = """SELECT r.id, r.title, r.content, r.sent_at, u.username, r.user_id, r.rating
              FROM reviews r 
              JOIN users u ON r.user_id = u.id 
-             WHERE r.variety = ?"""
+             WHERE r.variety = ?
+             ORDER BY r.sent_at DESC"""
     return db.query(sql, [tea_variety])
 
 def get_review(review_id):
@@ -43,12 +44,18 @@ def delete_review(review_id):
     sql = "DELETE FROM reviews WHERE id = ?"
     db.execute(sql, [review_id])
 
-def search_reviews(query):
+def search_reviews(query, limit=100):
+    like = query.lower() + "%"
     sql = """SELECT r.title, r.content, r.sent_at, r.variety, r.rating, r.id, u.username, u.id AS user_id 
              FROM reviews r 
              JOIN users u ON r.user_id = u.id 
-             WHERE r.content LIKE ? OR r.title LIKE ? OR u.username LIKE ? OR r.variety LIKE ?"""
-    params = [query + "%", query + "%", query + "%", query + "%"]
+             WHERE LOWER(r.title) LIKE ? 
+                 OR LOWER(r.content) LIKE ? 
+                 OR LOWER(u.username) LIKE ? 
+                 OR LOWER(r.variety) LIKE ?
+             ORDER BY r.sent_at DESC
+             LIMIT ?"""
+    params = [like, like, like, like, limit]
     return db.query(sql, params)
 
 def variety_exists(variety_name):
