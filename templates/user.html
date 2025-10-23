@@ -51,7 +51,7 @@
       <ul>
         {% for review in reviews %}
         <li class="review">
-          <h3><a href="/review/{{ review.id }}">{{ review.title }}</a></h3>
+          <h3><a href="/review/{{ review.id }}">{{ review.title | show_lines }}</a></h3>
           <strong>{{ review.variety_name }}:</strong> {{ review.content | show_lines }}
           <em>({{ review.sent_at }})</em>
 

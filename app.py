@@ -73,7 +73,7 @@ def add_review():
         if not content or len(content) > 5000:
             abort(403)
         
-        if not title or len(title) > 100:
+        if not title or len(title) > 80:
             abort(403)
 
         try:
@@ -104,7 +104,7 @@ def edit_review(review_id):
         rating = request.form.get("rating")
         if not content or len(content) > 5000:
             abort(403)
-        if not title or len(title) > 100:
+        if not title or len(title) > 80:
             abort(403)
 
         tea.update_review(review_id, title, content, rating)

@@ -19,7 +19,7 @@
     </nav>
 
     <section class="review">
-      <h2>{{ review.title }}</h2>
+      <h2>{{ review.title | show_lines }}</h2>
 
       <p>
         <strong><a href="/user/{{ review.user_id }}">{{ review.username }}</a>:</strong>

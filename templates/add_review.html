@@ -28,7 +28,7 @@
     <div class="create-review">
       <form action="/add_review" method="POST">
         <h4>Arvostelun otsikko:</h4>
-        <input type="text" name="title" maxlength="100" required placeholder="Kirjoita arvostelun otsikko" />
+        <input type="text" name="title" maxlength="80" required placeholder="Kirjoita arvostelun otsikko" />
 
         <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
