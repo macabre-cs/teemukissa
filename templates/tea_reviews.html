@@ -57,6 +57,7 @@
     <p>Ei vielä arvosteluita tälle teelle!</p>
     {% endif %}
 
+    {% if session.user_id %}
     <div class="create-review">
       <h2>Lisää arvostelu teelle :3</h2>
       <form action="/add_review" method="POST">
@@ -86,5 +87,6 @@
         <input type="submit" value="Lähetä :3" />
       </form>
     </div>
+    {% endif %}
   </body>
 </html>
