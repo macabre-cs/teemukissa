@@ -238,7 +238,7 @@ def remove_review(review_id):
             tea.delete_review(review_id)
             flash("Teehetken poistaminen onnistui! :>")
             return redirect("/teatimes")
-        elif "cancel" in request.form:
+        if "cancel" in request.form:
             return redirect(f"/review/{review_id}")
     return redirect("/teatimes")
 
@@ -271,7 +271,7 @@ def add_comment():
 
     if source == "tea":
         return redirect(f"/tea/{review['variety']}")
-    elif source == "review":
+    if source == "review":
         return redirect(f"/review/{review['id']}")
     else:
         abort(400)

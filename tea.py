@@ -36,7 +36,7 @@ def get_reviews(tea_variety):
 
 
 def get_review(review_id):
-    sql = """SELECT r.id, r.variety, r.title, r.content, r.user_id, r.rating, u.username, r.sent_at 
+    sql = """SELECT r.id, r.variety, r.title, r.content, r.user_id, r.rating, u.username, r.sent_at
              FROM reviews r 
              JOIN users u ON r.user_id = u.id 
              WHERE r.id = ?"""
@@ -64,7 +64,7 @@ def delete_review(review_id):
 
 def search_reviews(query, limit=100):
     like = query.lower() + "%"
-    sql = """SELECT r.title, r.content, r.sent_at, r.variety, r.rating, r.id, u.username, u.id AS user_id 
+    sql = """SELECT r.title, r.content, r.sent_at, r.variety, r.rating, r.id, u.username, u.id AS user_id
              FROM reviews r 
              JOIN users u ON r.user_id = u.id 
              WHERE LOWER(r.title) LIKE ? 
