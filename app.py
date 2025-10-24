@@ -1,15 +1,27 @@
 import sqlite3, secrets, math, time
-from flask import Flask
-from flask import redirect, render_template, request, session, abort, make_response, flash, get_flashed_messages, g
-import config, users, tea
+from flask import (
+    Flask,
+    redirect,
+    render_template,
+    request,
+    session,
+    abort,
+    make_response,
+    flash,
+    get_flashed_messages,
+    g,
+)
 import markupsafe
+import config, users, tea
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+
 @app.before_request
 def before_request():
     g.start_time = time.time()
+
 
 @app.after_request
 def after_request(response):
@@ -17,18 +29,22 @@ def after_request(response):
     print("elapsed time:", elapsed_time, "s")
     return response
 
+
 with app.app_context():
     tea.populate_tea_varieties()
+
 
 def require_login():
     if "user_id" not in session:
         flash("Sinun täytyy olla kirjautunut sisään!!!!!!!")
         abort(403)
 
+
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
         flash("CSRF-tarkistus epäonnistui >:/")
         abort(403)
+
 
 def get_paginated_reviews(reviews, page, page_size):
     total_reviews = len(reviews)
@@ -45,6 +61,7 @@ def get_paginated_reviews(reviews, page, page_size):
 
     return paginated_reviews, page_count, page
 
+
 def get_paginated_comments(comments, page, page_size):
     total_comments = len(comments)
     page_count = math.ceil(total_comments / page_size)
@@ -60,20 +77,24 @@ def get_paginated_comments(comments, page, page_size):
 
     return paginated_comments, page_count, page
 
+
 @app.template_filter()
 def show_lines(content):
     content = str(markupsafe.escape(content))
     content = content.replace("\n", "<br />")
     return markupsafe.Markup(content)
 
+
 @app.route("/")
 def index():
     return render_template("index.html", messages=get_flashed_messages())
+
 
 @app.route("/teatimes")
 def show_teatimes():
     varieties = tea.get_tea_varieties()
     return render_template("teatimes.html", varieties=varieties)
+
 
 @app.route("/tea/<tea_variety>")
 @app.route("/tea/<tea_variety>/<int:page>")
@@ -81,12 +102,23 @@ def tea_reviews(tea_variety, page=1):
     page_size = 10
     all_reviews = tea.get_reviews(tea_variety)
 
-    reviews, page_count, current_page = get_paginated_reviews(all_reviews, page, page_size)
+    reviews, page_count, current_page = get_paginated_reviews(
+        all_reviews, page, page_size
+    )
 
-    comments_count = {review["id"]: len(tea.get_comments(review["id"])) for review in reviews}
+    comments_count = {
+        review["id"]: len(tea.get_comments(review["id"])) for review in reviews
+    }
 
-    return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety, 
-                           comments_count=comments_count, page=current_page, page_count=page_count)
+    return render_template(
+        "tea_reviews.html",
+        reviews=reviews,
+        tea_variety=tea_variety,
+        comments_count=comments_count,
+        page=current_page,
+        page_count=page_count,
+    )
+
 
 @app.route("/review/<int:review_id>")
 @app.route("/review/<int:review_id>/<int:page>")
@@ -97,19 +129,28 @@ def view_review(review_id, page=1):
         abort(404)
 
     all_comments = tea.get_comments(review_id)
-    paginated_comments, page_count, current_page = get_paginated_comments(all_comments, page, 5)
-    return render_template("review.html", review=review, comments=paginated_comments, page=current_page, page_count=page_count)
+    paginated_comments, page_count, current_page = get_paginated_comments(
+        all_comments, page, 5
+    )
+    return render_template(
+        "review.html",
+        review=review,
+        comments=paginated_comments,
+        page=current_page,
+        page_count=page_count,
+    )
+
 
 @app.route("/add_review", methods=["GET", "POST"])
 def add_review():
     if request.method == "GET":
         varieties = tea.get_tea_varieties()
         return render_template("add_review.html", varieties=varieties)
-    
+
     if request.method == "POST":
         check_csrf()
         require_login()
-        
+
         user_id = session["user_id"]
         content = request.form["content"]
         variety = request.form["variety"]
@@ -127,7 +168,7 @@ def add_review():
         if not content or len(content) > 5000:
             flash("Teehetken sisältö on liian pitkä tai puuttuu :(")
             abort(403)
-        
+
         if not title or len(title) > 80:
             flash("Teehetken otsikko on liian pitkä tai puuttuu :<")
             abort(403)
@@ -141,6 +182,7 @@ def add_review():
         flash("Teehetken lisääminen onnistui! :3")
         return redirect(f"/tea/{variety}")
 
+
 @app.route("/edit/<int:review_id>", methods=["GET", "POST"])
 def edit_review(review_id):
     require_login()
@@ -149,7 +191,7 @@ def edit_review(review_id):
     if not review:
         flash("Teehetkeä ei löytynyt???")
         abort(404)
-    
+
     if review["user_id"] != session["user_id"]:
         flash("Et voi muokata toisten teehetkiä >:(")
         abort(403)
@@ -173,6 +215,7 @@ def edit_review(review_id):
         flash("Teehetken muokkaaminen onnistui! :3")
         return redirect(f"/review/{review["id"]}")
 
+
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])
 def remove_review(review_id):
     require_login()
@@ -194,11 +237,12 @@ def remove_review(review_id):
         if "continue" in request.form:
             tea.delete_review(review_id)
             flash("Teehetken poistaminen onnistui! :>")
-            return redirect(f"/teatimes")
+            return redirect("/teatimes")
         elif "cancel" in request.form:
             return redirect(f"/review/{review_id}")
-    return redirect("/teatimes")    
-    
+    return redirect("/teatimes")
+
+
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
     check_csrf()
@@ -215,8 +259,8 @@ def add_comment():
         abort(404)
 
     if not users.user_exists(user_id):
-            flash("Käyttäjätunnusta ei löytynyt >:(")
-            abort(403)
+        flash("Käyttäjätunnusta ei löytynyt >:(")
+        abort(403)
 
     if not content or len(content) > 1000:
         flash("Kommentti on liian pitkä tai puuttuu :<")
@@ -231,6 +275,7 @@ def add_comment():
         return redirect(f"/review/{review['id']}")
     else:
         abort(400)
+
 
 @app.route("/edit_comment", methods=["POST"])
 def edit_comment():
@@ -258,6 +303,7 @@ def edit_comment():
     flash("Kommentin muokkaaminen onnistui! :3")
     return redirect(f"/review/{review_id}")
 
+
 @app.route("/delete_comment", methods=["POST"])
 def delete_comment():
     check_csrf()
@@ -274,11 +320,12 @@ def delete_comment():
     if comment["user_id"] != session["user_id"]:
         flash("Et voi poistaa toisten kommentteja >:(")
         abort(403)
-    
+
     tea.delete_comment(comment_id)
     flash("Kommentin poistaminen onnistui! :O")
     return redirect(f"/review/{review_id}")
-    
+
+
 @app.route("/search")
 @app.route("/search/<int:page>")
 def search(page=1):
@@ -287,18 +334,29 @@ def search(page=1):
     page_size = 10
 
     if not query:
-        return render_template("search.html", query=query, results=[], page=1, page_count=1)
+        return render_template(
+            "search.html", query=query, results=[], page=1, page_count=1
+        )
 
     results = tea.search_reviews(query)
 
-    paginated_results, page_count, current_page = get_paginated_reviews(results, page, page_size)
+    paginated_results, page_count, current_page = get_paginated_reviews(
+        results, page, page_size
+    )
 
     if page < 1:
         return redirect(f"/search/1?query={query}")
     if page > page_count:
         return redirect(f"/search/{page_count}?query={query}")
 
-    return render_template("search.html", query=query, results=paginated_results, page=current_page, page_count=page_count)
+    return render_template(
+        "search.html",
+        query=query,
+        results=paginated_results,
+        page=current_page,
+        page_count=page_count,
+    )
+
 
 @app.route("/user/<int:user_id>")
 @app.route("/user/<int:user_id>/<int:page>")
@@ -307,17 +365,27 @@ def show_user(user_id, page=1):
     if not profile_user:
         flash("Käyttäjätunnusta ei löytynyt :<")
         abort(404)
-    
+
     all_reviews = users.get_reviews(user_id)
     reviews, page_count, current_page = get_paginated_reviews(all_reviews, page, 10)
 
     stats = users.get_stats(user_id)
     logged_in_user = session.get("user_id")
-    comments_count = {review["id"]: len(tea.get_comments(review["id"])) for review in reviews}
+    comments_count = {
+        review["id"]: len(tea.get_comments(review["id"])) for review in reviews
+    }
 
-    return render_template("user.html", profile_user=profile_user, reviews=reviews, 
-                           logged_in_user=logged_in_user, stats=stats, 
-                           comments_count=comments_count, page=current_page, page_count=page_count)
+    return render_template(
+        "user.html",
+        profile_user=profile_user,
+        reviews=reviews,
+        logged_in_user=logged_in_user,
+        stats=stats,
+        comments_count=comments_count,
+        page=current_page,
+        page_count=page_count,
+    )
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -343,16 +411,17 @@ def register():
             flash("Turvakisut eivät ole samat!!!")
             filled = {"username": username}
             return render_template("register.html", filled=filled)
-        
+
         try:
             users.create_user(username, password1)
             flash("Käyttäjätunnuksen luominen onnistui, voit nyt kirjautua sisään :3")
             return redirect("/")
-            
+
         except sqlite3.IntegrityError:
             flash("Käyttäjätunnus on jo varattu :(")
             filled = {"username": username}
             return render_template("register.html", filled=filled)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -372,7 +441,8 @@ def login():
         else:
             flash("Väärä käyttäjätunnus tai turvakisu! :<")
             return redirect("/login")
-        
+
+
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
     require_login()
@@ -396,7 +466,8 @@ def add_image():
         users.update_image(user_id, image)
         flash("Kuvan lisääminen onnistui!! :3")
         return redirect("/user/" + str(user_id))
-    
+
+
 @app.route("/image/<int:user_id>")
 def show_image(user_id):
     image = users.get_image(user_id)
@@ -407,6 +478,7 @@ def show_image(user_id):
     response = make_response(bytes(image))
     response.headers.set("Content-Type", "image/jpeg")
     return response
+
 
 @app.route("/logout")
 def logout():
