@@ -194,7 +194,10 @@ def remove_review(review_id):
         if "continue" in request.form:
             tea.delete_review(review_id)
             flash("Teehetken poistaminen onnistui! :>")
-        return redirect(f"/teatimes")
+            return redirect(f"/teatimes")
+        elif "cancel" in request.form:
+            return redirect(f"/review/{review_id}")
+    return redirect("/teatimes")    
     
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
