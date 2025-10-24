@@ -23,7 +23,7 @@
     <div class="profile-header">
       <div class="profile-picture">
         {% if profile_user.has_image %}
-        <img src="/image/{{ profile_user.id }}" alt="Profiilikuva" />
+        <img src="/image/{{ profile_user.id }}" alt="Käyttäjän {{ profile_user.username }} profiilikuva" />
         {% endif %} {% if profile_user.id == logged_in_user %}
         <div class="add-picture">
           <p><a href="/add_image">Lisää profiilikuva</a></p>
