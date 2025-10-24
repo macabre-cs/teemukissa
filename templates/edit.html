@@ -10,8 +10,12 @@
     </div>
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> | <a href="/search">Haku</a> |
-      <a href="/">Etusivu</a> | {% if session.user_id %} <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> |
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
@@ -31,8 +35,8 @@
         <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
         <label for="rating-{{ i }}" class="hidden">Teehetken arvosana {{ i }}:</label>
-        <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" {% if review.rating == i %}checked{% endif
-        %} /> {{ i }} {% endfor %}
+        <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" {% if review.rating == i %}checked{% endif%} /> {{ i }} 
+        {% endfor %}
 
         <h4>Arvostelu:</h4>
         <label for="content" class="hidden">Arvostelu:</label>

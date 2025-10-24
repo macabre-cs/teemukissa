@@ -9,8 +9,12 @@
       <h1>{{ tea_variety.capitalize() }} arvostelut</h1>
     </div>
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> | <a href="/search">Haku</a> |
-      <a href="/">Etusivu</a> | {% if session.user_id %} <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> |
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
@@ -19,7 +23,10 @@
 
     {% for message in get_flashed_messages() %}
     <div class="message">{{ message }}</div>
-    {% endfor %} {% if reviews %} {% for review in reviews %}
+    {% endfor %}
+    
+    {% if reviews %}
+    {% for review in reviews %}
     <div class="review">
       <h3><a href="/review/{{ review.id }}">{{ review.title | show_lines }}</a></h3>
       <p>

@@ -11,7 +11,9 @@
 
     {% for message in get_flashed_messages() %}
     <div class="message">{{ message }}</div>
-    {% endfor %} {% if session.user_id %}
+    {% endfor %}
+
+    {% if session.user_id %}
     <h3>Ihana nähdä {{ session["username"] }} :3</h3>
     {% endif %}
 
@@ -26,7 +28,8 @@
     </nav>
 
     <div class="buttons">
-      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> |
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
       <a href="/search">Hae teehetkiä</a>
     </div>
   </body>

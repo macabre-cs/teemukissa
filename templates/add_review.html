@@ -10,8 +10,11 @@
     </div>
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> | <a href="/search">Haku</a> | <a href="/">Etusivu</a> | {% if session.user_id
-      %} <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> |
+      {% if session.user_id%}
+      <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
@@ -20,7 +23,9 @@
 
     {% for message in get_flashed_messages() %}
     <div class="message">{{ message }}</div>
-    {% endfor %} {% if session.user_id %}
+    {% endfor %}
+
+    {% if session.user_id %}
     <h3>Tee vaan maistuu. Eikö niin {{ session["username"] }}?</h3>
     {% endif %}
 
@@ -33,7 +38,8 @@
         <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
         <label for="rating-{{ i }}" class="hidden">Teehetken arvosana {{ i }}:</label>
-        <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" required /> {{ i }} {% endfor %}
+        <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" required /> {{ i }}
+        {% endfor %}
 
         <h4>Valitse teelaatu:</h4>
         {% for variety in varieties %}
@@ -44,7 +50,8 @@
 
         <h4>Arvostelusi:</h4>
         <label for="content" class="hidden">Kirjoita arvostelusi:</label>
-        <textarea id="content" name="content" rows="4" maxlength="5000" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
+        <textarea id="content" name="content" rows="4" maxlength="5000" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea>
+        <br />
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" value="Lähetä :3" />
       </form>

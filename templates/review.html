@@ -10,8 +10,12 @@
     </header>
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> | <a href="/search">Haku</a> |
-      <a href="/">Etusivu</a> | {% if session.user_id %} <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> |
+      <a href="/add_review">Lisää teehetki</a> |
+      <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> |
+      {% if session.user_id %}
+      <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
@@ -24,7 +28,6 @@
 
     <section class="review">
       <h2>{{ review.title | show_lines }}</h2>
-
       <p>
         <strong><a href="/user/{{ review.user_id }}">{{ review.username }}</a>:</strong>
         {{ review.content | show_lines }}
@@ -89,7 +92,9 @@
         {% endif %}
       </p>
     </section>
-    {% endif %} {% if session.user_id %}
+    {% endif %}
+    
+    {% if session.user_id %}
     <section class="create-review">
       <h4>Lisää kommentti</h4>
       <form action="/add_comment" method="POST">
