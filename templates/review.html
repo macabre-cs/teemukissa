@@ -70,7 +70,8 @@
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
             <input type="hidden" name="comment_id" value="{{ comment.id }}" />
             <input type="hidden" name="review_id" value="{{ review.id }}" />
-            <textarea name="content" rows="2" required>{{ comment.content }}</textarea>
+            <label for="edit-content-{{ comment.id }}" class="hidden">Muokkaa kommenttia:</label>
+            <textarea id="edit-content-{{ comment.id }}" name="content" rows="2" required>{{ comment.content }}</textarea>
             <div class="edit-actions">
               <button type="submit" class="text-button">Tallenna</button>
               <label for="edit-toggle-{{ comment.id }}" class="cancel-button">Peruuta</label>
@@ -88,15 +89,15 @@
         {% endif %}
       </p>
     </section>
-    {% endif %}
-
-    {% if session.user_id %}
+    {% endif %} {% if session.user_id %}
     <section class="create-review">
       <h4>Lisää kommentti</h4>
       <form action="/add_comment" method="POST">
         <input type="hidden" name="review_id" value="{{ review.id }}" />
         <input type="hidden" name="source" value="review" />
+        <label for="comment-content" class="hidden">Kirjoita kommentti:</label>
         <textarea
+          id="comment-content"
           name="content"
           rows="2"
           maxlength="1000"

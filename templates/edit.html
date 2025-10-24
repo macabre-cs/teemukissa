@@ -10,12 +10,8 @@
     </div>
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> |
-      <a href="/add_review">Lisää teehetki</a> |
-      <a href="/search">Haku</a> |
-      <a href="/">Etusivu</a> | 
-      {% if session.user_id %}
-      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> | <a href="/add_review">Lisää teehetki</a> | <a href="/search">Haku</a> |
+      <a href="/">Etusivu</a> | {% if session.user_id %} <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
@@ -29,17 +25,18 @@
     <div class="create-review">
       <form action="/edit/{{ review.id }}" method="post">
         <h4>Arvostelun otsikko:</h4>
-        <input type="text" name="title" value="{{ review.title }}" maxlength="100" required />
+        <label for="title" class="hidden">Arvostelun otsikko:</label>
+        <input type="text" id="title" name="title" value="{{ review.title }}" maxlength="100" required />
 
         <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
-        <label>
-          <input type="radio" name="rating" value="{{ i }}" {% if review.rating == i %}checked{% endif %} /> {{ i }}
-        </label>
-        {% endfor %}
+        <label for="rating-{{ i }}" class="hidden">Teehetken arvosana {{ i }}:</label>
+        <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" {% if review.rating == i %}checked{% endif
+        %} /> {{ i }} {% endfor %}
 
         <h4>Arvostelu:</h4>
-        <textarea name="content" rows="5" maxlength="5000" required>{{ review.content }}</textarea>
+        <label for="content" class="hidden">Arvostelu:</label>
+        <textarea id="content" name="content" rows="5" maxlength="5000" required>{{ review.content }}</textarea>
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" value="Lähetä" />
       </form>

@@ -10,11 +10,8 @@
     </div>
 
     <nav class="nav">
-      <a href="/teatimes">Teehetket</a> |
-      <a href="/search">Haku</a> |
-      <a href="/">Etusivu</a> | 
-      {% if session.user_id %}
-      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/teatimes">Teehetket</a> | <a href="/search">Haku</a> | <a href="/">Etusivu</a> | {% if session.user_id
+      %} <a href="/logout">Kirjaudu ulos</a> |
       <a href="/user/{{ session.user_id }}">Oma profiili</a>
       {% else %}
       <a href="/login">Kirjaudu sisään</a>
@@ -23,32 +20,31 @@
 
     {% for message in get_flashed_messages() %}
     <div class="message">{{ message }}</div>
-    {% endfor %}
-
-    {% if session.user_id %}
+    {% endfor %} {% if session.user_id %}
     <h3>Tee vaan maistuu. Eikö niin {{ session["username"] }}?</h3>
     {% endif %}
 
     <div class="create-review">
       <form action="/add_review" method="POST">
         <h4>Arvostelun otsikko:</h4>
-        <input type="text" name="title" maxlength="80" required placeholder="Kirjoita arvostelun otsikko" />
+        <label for="title" class="hidden">Arvostelun otsikko:</label>
+        <input type="text" id="title" name="title" maxlength="80" required placeholder="Kirjoita arvostelun otsikko" />
 
         <h4>Tassuarvosana:</h4>
         {% for i in range(1, 6) %}
-        <label> <input type="radio" name="rating" value="{{ i }}" required /> {{ i }} </label>
-        {% endfor %}
+        <label for="rating-{{ i }}" class="hidden">Teehetken arvosana {{ i }}:</label>
+        <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" required /> {{ i }} {% endfor %}
 
         <h4>Valitse teelaatu:</h4>
         {% for variety in varieties %}
-        <label>
-          <input type="radio" name="variety" value="{{ variety[0] }}" required />
-          {{ variety[0].capitalize() }} </label
-        ><br />
+        <label for="variety-{{ variety[0] }}">{{ variety[0].capitalize() }}</label>
+        <input type="radio" id="variety-{{ variety[0] }}" name="variety" value="{{ variety[0] }}" required />
+        <br />
         {% endfor %}
 
         <h4>Arvostelusi:</h4>
-        <textarea name="content" rows="4" maxlength="5000" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
+        <label for="content" class="hidden">Kirjoita arvostelusi:</label>
+        <textarea id="content" name="content" rows="4" maxlength="5000" required placeholder="Kirjoita arvostelusi tähän mau! :3"></textarea><br />
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <input type="submit" value="Lähetä :3" />
       </form>
