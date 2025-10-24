@@ -51,7 +51,7 @@ def get_stats(user_id):
                            FROM reviews
                            WHERE user_id = ?"""
     total_reviews_result = db.query(sql_total_reviews, [user_id])
-    total_reviews = total_reviews_result[0]['total_reviews'] if total_reviews_result else 0
+    total_reviews = total_reviews_result[0]["total_reviews"] if total_reviews_result else 0
 
     sql_most_reviewed = """SELECT r.variety, COUNT(r.id) as review_count
                                 FROM reviews r
@@ -65,20 +65,20 @@ def get_stats(user_id):
                         FROM reviews r
                         WHERE r.user_id = ?"""
     avg_rating_result = db.query(sql_avg_rating, [user_id])
-    average_rating = avg_rating_result[0]['average_rating'] if avg_rating_result else None
+    average_rating = avg_rating_result[0]["average_rating"] if avg_rating_result else None
 
     sql_comments_given = """SELECT COUNT(*) as comments_given
                             FROM comments c
                             WHERE c.user_id = ?"""
     comments_given_result = db.query(sql_comments_given, [user_id])
-    comments_given = comments_given_result[0]['comments_given'] if comments_given_result else 0
+    comments_given = comments_given_result[0]["comments_given"] if comments_given_result else 0
 
     sql_comments_received = """SELECT COUNT(*) as comments_received
                                FROM comments c
                                JOIN reviews r ON c.review_id = r.id
                                WHERE r.user_id = ?"""
     comments_received_result = db.query(sql_comments_received, [user_id])
-    comments_received = comments_received_result[0]['comments_received'] if comments_received_result else 0
+    comments_received = comments_received_result[0]["comments_received"] if comments_received_result else 0
 
     stats = {
         "total_reviews": total_reviews,

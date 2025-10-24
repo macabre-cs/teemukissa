@@ -36,7 +36,7 @@
       {% endif %}
 
       <div class="actions">
-        {% if review.user_id == session['user_id'] %}
+        {% if review.user_id == session["user_id"] %}
         <a href="/edit/{{ review.id }}">Muokkaa</a> |
         <a href="/remove/{{ review.id }}">Poista</a>
         {% endif %}
@@ -53,7 +53,7 @@
           <span id="comment-{{ comment.id }}">{{ comment.content | show_lines }}</span>
           <em>({{ comment.sent_at }})</em>
 
-          {% if comment.user_id == session['user_id'] %}
+          {% if comment.user_id == session["user_id"] %}
           <input type="checkbox" id="edit-toggle-{{ comment.id }}" class="edit-toggle" hidden />
 
           <div class="comment-actions">

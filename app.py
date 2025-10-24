@@ -83,7 +83,7 @@ def tea_reviews(tea_variety, page=1):
 
     reviews, page_count, current_page = get_paginated_reviews(all_reviews, page, page_size)
 
-    comments_count = {review['id']: len(tea.get_comments(review['id'])) for review in reviews}
+    comments_count = {review["id"]: len(tea.get_comments(review["id"])) for review in reviews}
 
     return render_template("tea_reviews.html", reviews=reviews, tea_variety=tea_variety, 
                            comments_count=comments_count, page=current_page, page_count=page_count)
@@ -313,7 +313,7 @@ def show_user(user_id, page=1):
 
     stats = users.get_stats(user_id)
     logged_in_user = session.get("user_id")
-    comments_count = {review['id']: len(tea.get_comments(review['id'])) for review in reviews}
+    comments_count = {review["id"]: len(tea.get_comments(review["id"])) for review in reviews}
 
     return render_template("user.html", profile_user=profile_user, reviews=reviews, 
                            logged_in_user=logged_in_user, stats=stats, 
