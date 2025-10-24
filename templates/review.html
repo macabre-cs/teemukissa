@@ -90,6 +90,7 @@
     </section>
     {% endif %}
 
+    {% if session.user_id %}
     <section class="create-review">
       <h4>Lisää kommentti</h4>
       <form action="/add_comment" method="POST">
@@ -107,6 +108,7 @@
         <input type="submit" value="Lisää kommentti" />
       </form>
     </section>
+    {% endif %}
 
     <div class="buttons">
       <a href="/tea/{{ review.variety }}">Takaisin {{ review.variety }} arvosteluihin</a>
